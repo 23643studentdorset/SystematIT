@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+    <ProjectReference Include="..\Infrastucture.DataAccess\Infrastucture.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
