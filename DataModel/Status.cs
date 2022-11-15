@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 
 namespace DataModel
 {
-    internal class Status
+    public class Status
     {
        public int StatusId { get; set; }
-       public String Name { get; set; }
-       public String Description { get; set; }
-       public Boolean Active { get; set; }
+
+       public string Name { get; set; }
+
+       public string Description { get; set; }
+
+       public bool Active { get; set; }
+
        public User CreatedBy { get; set; }
+
        public DateTime CreatedOn { get; set; }
+
        public User? ModifiedBy { get; set; }
+
        public Nullable<DateTime> ModifiedOn { get; set; }
+
     }
 }
