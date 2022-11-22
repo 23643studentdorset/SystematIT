@@ -22,7 +22,7 @@ namespace DataModel
 
        public User? ModifiedBy { get; set; }
 
-       public Nullable<DateTime> ModifiedOn { get; set; }
+       public DateTime? ModifiedOn { get; set; }
 
     }
 }

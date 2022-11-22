@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataModel
+﻿namespace DataModel
 {
     public class KanbanTask
     {
-        public int TaskId { get; set; }
+        public int KanbanTaskId { get; set; }
 
         public string Title { get; set; }
 
@@ -24,7 +18,7 @@ namespace DataModel
 
         public DateTime Created { get; set; }
 
-        public Nullable<DateTime> Updated { get; set; }
+        public DateTime? Updated { get; set; }
 
         public string Description { get; set; }
 
