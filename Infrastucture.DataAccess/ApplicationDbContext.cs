@@ -12,7 +12,7 @@ namespace Infrastucture.DataAccess
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Database.SetInitializer<ApplicationDbContext>(new CreateDatabaseIfNotExists<ApplicationDbContext>());
+            Database.EnsureCreated();
         }
         public ApplicationDbContext() : base()
         {
