@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Infrastucture.DataAccess.Interfaces;
+using Infrastucture.DataAccess.Repositories;
 
 namespace Infrastucture.DataAccess
 {
@@ -14,6 +11,9 @@ namespace Infrastucture.DataAccess
         public static void AddDataAccessLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SystematITConection")));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }

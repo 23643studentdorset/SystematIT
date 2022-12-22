@@ -6,7 +6,7 @@
 
         public string Title { get; set; }
 
-        public Status BoardStatus { get; set; }
+        public Status TaskStatus { get; set; }
 
         public Department Department { get; set; }
 

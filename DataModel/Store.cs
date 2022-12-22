@@ -16,9 +16,9 @@ namespace DataModel
 
         public bool Active { get; set; }
 
-        public User CreateBy { get; set; }
+        public User CreatedBy { get; set; }
 
-        public DateTime CreateOn { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public User? ModifiedBy { get; set; }
 

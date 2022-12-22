@@ -16,9 +16,9 @@ namespace DataModel
 
         public bool HistoryTo { get; set; }
 
-        public User CreateBy { get; set; }
+        public User CreatedBy { get; set; }
 
-        public DateTime CreateOn { get; set; }
+        public DateTime CreatedOn { get; set; }
       
     }
 }
