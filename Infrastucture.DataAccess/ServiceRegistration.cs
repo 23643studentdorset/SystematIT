@@ -14,6 +14,7 @@ namespace Infrastucture.DataAccess
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ILoginRepository, LoginRepository>();
         }
     }
 }

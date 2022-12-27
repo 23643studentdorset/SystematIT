@@ -12,10 +12,12 @@ namespace Infrastucture.Identity.Services
     public class AuthService: IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ILoginRepository _loginRepository;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, ILoginRepository loginRepository)
         {
             _userRepository = userRepository;
+            _loginRepository = loginRepository; 
         }
         public async Task<string> Login(AuthRequest request)
         {
@@ -23,8 +25,8 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var result = await _userRepository.FindByCondition(x => x.Email == request.Email);
-                Console.WriteLine(result);
-                if (result != null)
+                var result2 = await _loginRepository.FindByCondition(x => x.Password == request.Password);
+                if (result != null && result2 != null)
                 {
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@2410"));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

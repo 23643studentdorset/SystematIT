@@ -115,9 +115,13 @@ namespace Infrastucture.DataAccess.Data
         public void Seed()
         {
             var firstUser = new User { UserId = 1, FirstName = "Luciano", LastName = "Gimenez", Address = "35 Test Adress", DOB = new DateTime(1989, 04, 10), Email = "lucianoGimenez@gmail.com", Mobile = "0838352063" };
+            var firstLogin = new Login { Email = "lucianoGimenez@gmail.com", Password = "secret" };
 
             modelBuilder.Entity<User>()
                 .HasData(firstUser);
+
+            modelBuilder.Entity<Login>()
+                .HasData(firstLogin);
 
             modelBuilder.Entity<Department>()
                 .HasData(
