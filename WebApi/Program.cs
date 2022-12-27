@@ -1,6 +1,7 @@
 using Infrastucture.DataAccess;
 //using Azure.Identity;
 using KanbanModule;
+using Infrastucture.Identity;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddKanbanModuleLayer();
+builder.Services.AddAuthLayer();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

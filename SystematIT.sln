@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture.DataAccess", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "DataModel\DataModel.csproj", "{80704BFA-795A-41AB-939C-9FCAEC704BFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insfrastucture.Identity", "Insfrastucture.Identity\Insfrastucture.Identity.csproj", "{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture.Identity", "Insfrastucture.Identity\Infrastucture.Identity.csproj", "{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
