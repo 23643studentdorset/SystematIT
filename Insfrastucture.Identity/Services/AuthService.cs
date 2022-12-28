@@ -12,21 +12,19 @@ namespace Infrastucture.Identity.Services
     public class AuthService: IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly ILoginRepository _loginRepository;
 
-        public AuthService(IUserRepository userRepository, ILoginRepository loginRepository)
+        public AuthService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _loginRepository = loginRepository; 
-        }
-        public async Task<string> Login(AuthRequest request)
-        {
             
+        }
+        public async Task<object> Login(AuthRequest request)
+        {           
             try
             {
                 var result = await _userRepository.FindByCondition(x => x.Email == request.Email);
-                var result2 = await _loginRepository.FindByCondition(x => x.Password == request.Password);
-                if (result != null && result2 != null)
+               
+                if (result != null && result.Password.Equals(request.Password))
                 {
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@2410"));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -38,10 +36,11 @@ namespace Infrastucture.Identity.Services
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                    return tokenString;
+                    return new { Token = tokenString,
+                                 User = result};
                 }else
                 {
-                    return "NoToken";
+                    return null;
                 }
 
             }

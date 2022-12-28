@@ -5,6 +5,6 @@ namespace Infrastucture.Identity.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> Login(AuthRequest user);
+        Task<object> Login(AuthRequest user);
     }
 }

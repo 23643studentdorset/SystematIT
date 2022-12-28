@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             try
             {
                 var result = await _authService.Login(request);
-                if (result.Equals("NoToken"))
+                if (result == null)
                 {
                     return Unauthorized();
                 }

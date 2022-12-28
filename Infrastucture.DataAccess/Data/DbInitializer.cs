@@ -14,19 +14,6 @@ namespace Infrastucture.DataAccess.Data
 
         public void EntityDefinition()
         {
-            modelBuilder.Entity<Login>(entity =>
-            {
-                entity.HasKey(e => e.Email);
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(125)
-                    .IsUnicode(true);
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.Navigation(e => e.Sender).AutoInclude();
@@ -114,15 +101,11 @@ namespace Infrastucture.DataAccess.Data
 
         public void Seed()
         {
-            var firstUser = new User { UserId = 1, FirstName = "Luciano", LastName = "Gimenez", Address = "35 Test Adress", DOB = new DateTime(1989, 04, 10), Email = "lucianoGimenez@gmail.com", Mobile = "0838352063" };
-            var firstLogin = new Login { Email = "lucianoGimenez@gmail.com", Password = "secret" };
+            var firstUser = new User { UserId = 1, FirstName = "Luciano", LastName = "Gimenez", Address = "35 Test Adress", DOB = new DateTime(1989, 04, 10), Email = "lucianoGimenez@gmail.com", Mobile = "0838352063", Company = "SystematIT", Password = "secret1" };
 
             modelBuilder.Entity<User>()
                 .HasData(firstUser);
-
-            modelBuilder.Entity<Login>()
-                .HasData(firstLogin);
-
+          
             modelBuilder.Entity<Department>()
                 .HasData(
                     new

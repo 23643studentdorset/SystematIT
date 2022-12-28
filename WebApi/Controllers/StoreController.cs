@@ -1,11 +1,13 @@
 using KanbanModule.DTOs;
 using KanbanModule.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class StoreController : ControllerBase
     {

@@ -23,7 +23,6 @@ namespace Infrastucture.DataAccess
         public DbSet<Message> Messages { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<TaskHistory> TaskHistories { get; set; }
-        public DbSet<Login> Logins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
