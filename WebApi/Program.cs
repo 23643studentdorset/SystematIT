@@ -36,9 +36,9 @@ builder.Services.AddAuthentication(opt =>
              ValidateLifetime = true,
              ValidateIssuerSigningKey = true,
 
-             ValidIssuer = "SystematIT",
-             ValidAudience = "https://localhost:7045",
-             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@2410"))
+             ValidIssuer = builder.Configuration["JWT:Issuer"],
+             ValidAudience = builder.Configuration["JWT:Audience"],
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
          };
      });
 
