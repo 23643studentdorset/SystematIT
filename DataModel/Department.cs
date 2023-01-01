@@ -10,6 +10,8 @@ namespace DataModel
     {
         public int DepartmentId { get; set;}
 
+        public Company Company { get; set; }
+        
         public string Name { get; set; }
 
         public string Description { get; set; }

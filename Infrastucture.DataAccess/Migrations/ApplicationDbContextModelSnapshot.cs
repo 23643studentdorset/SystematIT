@@ -22,6 +22,56 @@ namespace Infrastucture.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DataModel.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            CompanyId = 1,
+                            Active = true,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Butlers",
+                            PhoneNumber = "+353864069750"
+                        },
+                        new
+                        {
+                            CompanyId = 2,
+                            Active = true,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "SystematIT",
+                            PhoneNumber = "+353833057491"
+                        });
+                });
+
             modelBuilder.Entity("DataModel.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
@@ -32,6 +82,9 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
@@ -55,6 +108,8 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("DepartmentId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
@@ -66,8 +121,9 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             DepartmentId = 1,
                             Active = true,
+                            CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2022, 12, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -75,8 +131,9 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             DepartmentId = 2,
                             Active = true,
+                            CompanyId = 2,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2022, 12, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -218,6 +275,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
 
@@ -242,11 +302,25 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("StoreId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
 
                     b.ToTable("Stores");
+
+                    b.HasData(
+                        new
+                        {
+                            StoreId = 1,
+                            Active = true,
+                            CompanyId = 1,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Cafe",
+                            Name = "Ballsbridge"
+                        });
                 });
 
             modelBuilder.Entity("DataModel.TaskHistory", b =>
@@ -294,9 +368,8 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
@@ -321,7 +394,13 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Users");
 
@@ -330,18 +409,26 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             UserId = 1,
                             Address = "35 Test Adress",
-                            Company = "SystematIT",
+                            CompanyId = 2,
                             DOB = new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lucianoGimenez@gmail.com",
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "secret1"
+                            Password = "aeljVr5hy1RWYsVOpuXLifbjhFeitLz20Tq5G6g/NPg=",
+                            Salt = "722N+seqXSjgxbiSm7+Mqg=="
                         });
                 });
 
             modelBuilder.Entity("DataModel.Department", b =>
                 {
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Department_Company_CompanyId");
+
                     b.HasOne("DataModel.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
@@ -351,6 +438,8 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.User", "ModifiedBy")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("CreatedBy");
 
@@ -442,6 +531,13 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.Store", b =>
                 {
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Store_Company_CompanyId");
+
                     b.HasOne("DataModel.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
@@ -451,6 +547,8 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.User", "ModifiedBy")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("CreatedBy");
 
@@ -474,6 +572,17 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("DataModel.User", b =>
+                {
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>

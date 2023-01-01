@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221122201225_SystematITDb")]
-    partial class SystematITDb
+    [Migration("20230101195712_SystematITDb1")]
+    partial class SystematITDb1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,56 @@ namespace Infrastucture.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("DataModel.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            CompanyId = 1,
+                            Active = true,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Butlers",
+                            PhoneNumber = "+353864069750"
+                        },
+                        new
+                        {
+                            CompanyId = 2,
+                            Active = true,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "SystematIT",
+                            PhoneNumber = "+353833057491"
+                        });
+                });
 
             modelBuilder.Entity("DataModel.Department", b =>
                 {
@@ -35,10 +85,13 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int>("CreateByUserId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreateOn")
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -57,11 +110,35 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("CreateByUserId");
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentId = 1,
+                            Active = true,
+                            CompanyId = 1,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Human Resources",
+                            Name = "HR"
+                        },
+                        new
+                        {
+                            DepartmentId = 2,
+                            Active = true,
+                            CompanyId = 2,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Finance",
+                            Name = "Finance"
+                        });
                 });
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>
@@ -73,9 +150,6 @@ namespace Infrastucture.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KanbanTaskId"), 1L, 1);
 
                     b.Property<int>("AssigneeUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BoardStatusStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -97,6 +171,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TaskStatusStatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -108,33 +185,15 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasIndex("AssigneeUserId");
 
-                    b.HasIndex("BoardStatusStatusId");
-
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("ReporterUserId");
 
                     b.HasIndex("StoreId");
 
+                    b.HasIndex("TaskStatusStatusId");
+
                     b.ToTable("KanbanTasks");
-                });
-
-            modelBuilder.Entity("DataModel.Login", b =>
-                {
-                    b.Property<string>("Email")
-                        .HasMaxLength(125)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(125)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Email");
-
-                    b.ToTable("Logins");
                 });
 
             modelBuilder.Entity("DataModel.Message", b =>
@@ -216,13 +275,15 @@ namespace Infrastucture.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoreId"), 1L, 1);
 
                     b.Property<bool>("Active")
-                        .HasMaxLength(50)
                         .HasColumnType("bit");
 
-                    b.Property<int>("CreateByUserId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreateOn")
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -243,11 +304,25 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("StoreId");
 
-                    b.HasIndex("CreateByUserId");
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
 
                     b.ToTable("Stores");
+
+                    b.HasData(
+                        new
+                        {
+                            StoreId = 1,
+                            Active = true,
+                            CompanyId = 1,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Cafe",
+                            Name = "Ballsbridge"
+                        });
                 });
 
             modelBuilder.Entity("DataModel.TaskHistory", b =>
@@ -258,10 +333,10 @@ namespace Infrastucture.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
 
-                    b.Property<int>("CreateByUserId")
+                    b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreateOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("HistoryFrom")
@@ -276,7 +351,7 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("TaskHistoryId");
 
-                    b.HasIndex("CreateByUserId");
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("TaskKanbanTaskId");
 
@@ -294,6 +369,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
@@ -314,16 +392,48 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Address = "35 Test Adress",
+                            CompanyId = 2,
+                            DOB = new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "lucianoGimenez@gmail.com",
+                            FirstName = "Luciano",
+                            LastName = "Gimenez",
+                            Mobile = "0838352063",
+                            Password = "aeljVr5hy1RWYsVOpuXLifbjhFeitLz20Tq5G6g/NPg=",
+                            Salt = "722N+seqXSjgxbiSm7+Mqg=="
+                        });
                 });
 
             modelBuilder.Entity("DataModel.Department", b =>
                 {
-                    b.HasOne("DataModel.User", "CreateBy")
+                    b.HasOne("DataModel.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CreateByUserId")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Department_Company_CompanyId");
+
+                    b.HasOne("DataModel.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -331,7 +441,9 @@ namespace Infrastucture.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
 
-                    b.Navigation("CreateBy");
+                    b.Navigation("Company");
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("ModifiedBy");
                 });
@@ -344,13 +456,6 @@ namespace Infrastucture.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_KanbanTask_Assignee_UserId");
-
-                    b.HasOne("DataModel.Status", "BoardStatus")
-                        .WithMany()
-                        .HasForeignKey("BoardStatusStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_KanbanTask_Status_StatusId");
 
                     b.HasOne("DataModel.Department", "Department")
                         .WithMany()
@@ -370,15 +475,22 @@ namespace Infrastucture.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("StoreId");
 
-                    b.Navigation("Assignee");
+                    b.HasOne("DataModel.Status", "TaskStatus")
+                        .WithMany()
+                        .HasForeignKey("TaskStatusStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_KanbanTask_Status_StatusId");
 
-                    b.Navigation("BoardStatus");
+                    b.Navigation("Assignee");
 
                     b.Navigation("Department");
 
                     b.Navigation("Reporter");
 
                     b.Navigation("Store");
+
+                    b.Navigation("TaskStatus");
                 });
 
             modelBuilder.Entity("DataModel.Message", b =>
@@ -421,9 +533,16 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.Store", b =>
                 {
-                    b.HasOne("DataModel.User", "CreateBy")
+                    b.HasOne("DataModel.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CreateByUserId")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Store_Company_CompanyId");
+
+                    b.HasOne("DataModel.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -431,16 +550,18 @@ namespace Infrastucture.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
 
-                    b.Navigation("CreateBy");
+                    b.Navigation("Company");
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("DataModel.TaskHistory", b =>
                 {
-                    b.HasOne("DataModel.User", "CreateBy")
+                    b.HasOne("DataModel.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreateByUserId")
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -450,9 +571,20 @@ namespace Infrastucture.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreateBy");
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("DataModel.User", b =>
+                {
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>
