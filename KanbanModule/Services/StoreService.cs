@@ -10,11 +10,13 @@ namespace KanbanModule.Services
     {
         private readonly IStoreRepository _storeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository)
+        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository, ICompanyRepository companyRepository)
         {
             _storeRepository = storeRepository;
             _userRepository = userRepository;
+            _companyRepository = companyRepository; 
         }
         public async Task<IEnumerable<Store>> Get()
         {
@@ -76,6 +78,7 @@ namespace KanbanModule.Services
                 {
                     Name = request.Name,
                     Description = request.Description,
+                    Company = await _companyRepository.Get(1),
                     Active = true,
                     CreatedBy = await _userRepository.Get(1),
                     CreatedOn = DateTime.Now,
@@ -94,7 +97,11 @@ namespace KanbanModule.Services
             try
             {
                 var storeToUpdate = await _storeRepository.Get(request.StoreId);
-                storeToUpdate.Name = request.Name;
+                //request.Name != null ? storeToUpdate.Name = request.Name;
+                if (request.Name != null)
+                {
+                    storeToUpdate.Name = request.Name;
+                }
                 storeToUpdate.Description = request.Description;
                 storeToUpdate.ModifiedBy = await _userRepository.Get(1);
                 storeToUpdate.ModifiedOn = DateTime.Now;

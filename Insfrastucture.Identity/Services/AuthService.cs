@@ -24,8 +24,14 @@ namespace Infrastucture.Identity.Services
         {           
             try
             {
+                var inconmingEncryptedPassword = " ";
                 var result = await _userRepository.FindByCondition(x => x.Email == request.Email);
-                var inconmingEncryptedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password + result.Salt))); 
+                
+                if(result != null)
+                {
+                    inconmingEncryptedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password + result.Salt)));
+                }  
+                    
                     
                
                 if (result != null && result.Password.Equals(inconmingEncryptedPassword))
