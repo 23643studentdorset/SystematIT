@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddKanbanModuleLayer();
 builder.Services.AddAuthLayer();
+builder.Services.AddUsersLayer();
 
 builder.Services.AddControllers();
 //builder.Services.AddAuthorization();
