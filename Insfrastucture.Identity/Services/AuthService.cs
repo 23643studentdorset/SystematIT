@@ -6,17 +6,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastucture.Identity.Services
 {
     public class AuthService: IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _iconfiguration;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, IConfiguration iConfiguration)
         {
             _userRepository = userRepository;
-            
+            _iconfiguration = iConfiguration;
         }
         public async Task<object> Login(AuthRequest request)
         {           
@@ -28,11 +30,11 @@ namespace Infrastucture.Identity.Services
                
                 if (result != null && result.Password.Equals(inconmingEncryptedPassword))
                 {
-                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@2410"));
+                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_iconfiguration["JWT:Key"]));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                     var tokenOptions = new JwtSecurityToken(
-                        issuer: "SystematIT",
-                        audience: "https://localhost:7045",
+                        issuer: _iconfiguration["JWT:Issuer"],
+                        audience: _iconfiguration["JWT:Audience"],
                         claims: new List<Claim>(),
                         expires: DateTime.Now.AddMinutes(60),
                         signingCredentials: signinCredentials

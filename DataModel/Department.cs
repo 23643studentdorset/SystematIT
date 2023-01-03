@@ -9,8 +9,6 @@ namespace DataModel
     public class Department
     {
         public int DepartmentId { get; set;}
-
-        public Company Company { get; set; }
         
         public string Name { get; set; }
 

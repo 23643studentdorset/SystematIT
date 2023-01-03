@@ -23,7 +23,7 @@ namespace WebApi.Controllers
 
        
         [HttpGet]       
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace WebApi.Controllers
             }
             catch (Exception exception)
             {
-                _logger.LogError("Unexpected xeption on Get all stores ", exception);
+                _logger.LogError("Unexpected exception on Get all stores ", exception);
                 return BadRequest(exception.Message);
             }
         }
@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         
         [HttpGet("id")]
         [ValidateModel]       
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace WebApi.Controllers
         
         [HttpGet("name")]
         [ValidateModel]       
-        public async Task<IActionResult> Get(string name)
+        public async Task<IActionResult> GetByName(string name)
         {
             try
             {
@@ -75,10 +75,28 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpGet("company")]
+        [ValidateModel]
+        public async Task<IActionResult> GetByCompany(string company)
+        {
+            try
+            {
+                var result = await _storeService.GetByCompany(company);
+                if (result == null)
+                    return StatusCode(StatusCodes.Status204NoContent, $"No Stores found for company: {company}");
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Unexpected exception on Get store by company ", exception);
+                return BadRequest(exception.Message);
+            }
+        }
+
 
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> Post(AddStoreRequest request)
+        public async Task<IActionResult> PostNewStore(AddStoreRequest request)
         {
             try
             {
@@ -95,7 +113,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [ValidateModel]
-        public async Task<IActionResult> Put(UpdateStoreRequest request)
+        public async Task<IActionResult> PutUpdateStore(UpdateStoreRequest request)
         {
             try
             {
@@ -113,7 +131,7 @@ namespace WebApi.Controllers
 
         [HttpDelete("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteStore(int id)
         {
             try
             {

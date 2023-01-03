@@ -10,5 +10,10 @@ namespace Infrastucture.Identity
         {
             services.AddScoped<IAuthService, AuthService>();
         }
+        
+        public static void AddUsersLayer(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
+        }
     }
 }

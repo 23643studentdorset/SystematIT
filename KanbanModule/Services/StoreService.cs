@@ -55,6 +55,19 @@ namespace KanbanModule.Services
             }
         }
 
+        public async Task<IEnumerable<Store>> GetByCompany (string companyName)
+        {
+             try
+            {
+                var result = await _storeRepository.FindListByCondition(x => x.Company.Name == companyName);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+}
+
         public async Task<int> AddStore(AddStoreRequest request)
         {
             try

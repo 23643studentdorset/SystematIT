@@ -1,4 +1,5 @@
 ﻿using DataModel;
+using Infrastucture.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -31,6 +32,11 @@ namespace Infrastucture.DataAccess.Data
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Message_Receiver_UserId");
+
+                entity.HasOne(e => e.Company)
+                   .WithMany()
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasConstraintName("FK_Message_Company_CompanyId");
             });
 
             modelBuilder.Entity<KanbanTask>(entity =>
@@ -58,6 +64,11 @@ namespace Infrastucture.DataAccess.Data
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_KanbanTask_Department_DepartmentId");
+
+                entity.HasOne(e => e.Company)
+                   .WithMany()
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasConstraintName("FK_KanbanTask_Company_CompanyId");
             });
 
             modelBuilder.Entity<Store>(entity =>
@@ -97,11 +108,6 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
 
-                entity.HasOne(e => e.Company)
-                   .WithMany()
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_Department_Company_CompanyId");
-
             });
 
             modelBuilder.Entity<Status>(entity =>
@@ -114,10 +120,10 @@ namespace Infrastucture.DataAccess.Data
 
         public void Seed()
         {
-            var company_test_1 = new Company { CompanyId = 1, Active = true, CreatedOn = DateTime.Today, Name = "Butlers", PhoneNumber = "+353864069750"};
-            var company_test_2 = new Company { CompanyId = 2, Active = true, CreatedOn = DateTime.Today, Name = "SystematIT", PhoneNumber = "+353833057491" };
+            var company_test_1 = new Company { CompanyId = 1, Active = true, Description = "Chocolates Company", CreatedOn = DateTime.Today, Name = "Butlers", PhoneNumber = "+353864069750"};
+            var company_test_2 = new Company { CompanyId = 2, Active = true, Description = "IT Company", CreatedOn = DateTime.Today, Name = "SystematIT", PhoneNumber = "+353833057491" };
 
-            var passwordHashed = SaltAndHashPassword("secret1");
+            var passwordHashed = PasswordEncryption.SaltAndHashPassword("secret1");
                       
             modelBuilder.Entity<Company>().HasData(company_test_1);
             modelBuilder.Entity<Company>().HasData(company_test_2);
@@ -156,7 +162,6 @@ namespace Infrastucture.DataAccess.Data
                 new
                     {
                         DepartmentId = 1,
-                        CompanyId = company_test_1.CompanyId,
                         Name = "HR",
                         Description = "Human Resources",
                         Active = true,
@@ -166,7 +171,6 @@ namespace Infrastucture.DataAccess.Data
                 new
                     {
                         DepartmentId = 2,
-                        CompanyId = company_test_2.CompanyId,
                         Name = "Finance",
                         Description = "Finance",
                         Active = true,
@@ -175,25 +179,9 @@ namespace Infrastucture.DataAccess.Data
                     }
                 );
         }
-        private static (string, string) SaltAndHashPassword(string password)
-        {
-            string salt = Convert.ToBase64String(GenerateSalt());
+       
 
-            string passwordWithSalt = password + salt;
-            byte[] hash = SHA256.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(passwordWithSalt));
-            string hashedPassword = Convert.ToBase64String(hash);
-            return (hashedPassword, salt);
-        }
-
-        private static byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-            return salt;            
-        }
+        
 
     }
 }

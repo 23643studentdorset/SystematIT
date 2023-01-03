@@ -39,6 +39,10 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -56,8 +60,9 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
                         },
@@ -65,8 +70,9 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
                         });
@@ -82,9 +88,6 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
@@ -108,8 +111,6 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
@@ -121,9 +122,8 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             DepartmentId = 1,
                             Active = true,
-                            CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -131,9 +131,8 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             DepartmentId = 2,
                             Active = true,
-                            CompanyId = 2,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -148,6 +147,9 @@ namespace Infrastucture.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KanbanTaskId"), 1L, 1);
 
                     b.Property<int>("AssigneeUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -183,6 +185,8 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasIndex("AssigneeUserId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("ReporterUserId");
@@ -202,6 +206,9 @@ namespace Infrastucture.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"), 1L, 1);
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -216,6 +223,8 @@ namespace Infrastucture.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("MessageId");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ReceiverUserId");
 
@@ -317,7 +326,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -415,20 +424,13 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "aeljVr5hy1RWYsVOpuXLifbjhFeitLz20Tq5G6g/NPg=",
-                            Salt = "722N+seqXSjgxbiSm7+Mqg=="
+                            Password = "Hl56sCQ/fJgIbU+1yg2gnqVFU0V2zNQaSQ+oQf84w8Y=",
+                            Salt = "ZXdghw1NUmSeyovdYZqNfw=="
                         });
                 });
 
             modelBuilder.Entity("DataModel.Department", b =>
                 {
-                    b.HasOne("DataModel.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Department_Company_CompanyId");
-
                     b.HasOne("DataModel.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
@@ -438,8 +440,6 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.User", "ModifiedBy")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
-
-                    b.Navigation("Company");
 
                     b.Navigation("CreatedBy");
 
@@ -454,6 +454,13 @@ namespace Infrastucture.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_KanbanTask_Assignee_UserId");
+
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_KanbanTask_Company_CompanyId");
 
                     b.HasOne("DataModel.Department", "Department")
                         .WithMany()
@@ -482,6 +489,8 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.Navigation("Assignee");
 
+                    b.Navigation("Company");
+
                     b.Navigation("Department");
 
                     b.Navigation("Reporter");
@@ -493,6 +502,13 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.Message", b =>
                 {
+                    b.HasOne("DataModel.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Message_Company_CompanyId");
+
                     b.HasOne("DataModel.User", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverUserId")
@@ -506,6 +522,8 @@ namespace Infrastucture.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Message_Sender_UserId");
+
+                    b.Navigation("Company");
 
                     b.Navigation("Receiver");
 

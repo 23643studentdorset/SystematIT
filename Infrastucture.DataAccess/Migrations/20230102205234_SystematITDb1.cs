@@ -16,6 +16,7 @@ namespace Infrastucture.DataAccess.Migrations
                     CompanyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -59,7 +60,6 @@ namespace Infrastucture.DataAccess.Migrations
                 {
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
@@ -71,12 +71,6 @@ namespace Infrastucture.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentId);
-                    table.ForeignKey(
-                        name: "FK_Department_Company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Departments_Users_CreatedByUserId",
                         column: x => x.CreatedByUserId,
@@ -97,6 +91,7 @@ namespace Infrastucture.DataAccess.Migrations
                     MessageId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     SenderUserId = table.Column<int>(type: "int", nullable: false),
                     ReceiverUserId = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -104,6 +99,12 @@ namespace Infrastucture.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.MessageId);
+                    table.ForeignKey(
+                        name: "FK_Message_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Message_Receiver_UserId",
                         column: x => x.ReceiverUserId,
@@ -194,6 +195,7 @@ namespace Infrastucture.DataAccess.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TaskStatusStatusId = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     StoreId = table.Column<int>(type: "int", nullable: true),
                     ReporterUserId = table.Column<int>(type: "int", nullable: false),
                     AssigneeUserId = table.Column<int>(type: "int", nullable: false),
@@ -210,6 +212,12 @@ namespace Infrastucture.DataAccess.Migrations
                         column: x => x.AssigneeUserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_KanbanTask_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_KanbanTask_Department_DepartmentId",
@@ -267,38 +275,33 @@ namespace Infrastucture.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Name", "PhoneNumber" },
-                values: new object[] { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Butlers", "+353864069750" });
+                columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
+                values: new object[] { 1, true, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chocolates Company", "Butlers", "+353864069750" });
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Name", "PhoneNumber" },
-                values: new object[] { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "SystematIT", "+353833057491" });
+                columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
+                values: new object[] { 2, true, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IT Company", "SystematIT", "+353833057491" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "aeljVr5hy1RWYsVOpuXLifbjhFeitLz20Tq5G6g/NPg=", "722N+seqXSjgxbiSm7+Mqg==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "Hl56sCQ/fJgIbU+1yg2gnqVFU0V2zNQaSQ+oQf84w8Y=", "ZXdghw1NUmSeyovdYZqNfw==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
-                columns: new[] { "DepartmentId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" });
+                columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
+                values: new object[] { 1, true, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
-                columns: new[] { "DepartmentId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 2, true, 2, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" });
+                columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
+                values: new object[] { 2, true, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_CompanyId",
-                table: "Departments",
-                column: "CompanyId");
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_CreatedByUserId",
@@ -314,6 +317,11 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "IX_KanbanTasks_AssigneeUserId",
                 table: "KanbanTasks",
                 column: "AssigneeUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KanbanTasks_CompanyId",
+                table: "KanbanTasks",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KanbanTasks_DepartmentId",
@@ -334,6 +342,11 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "IX_KanbanTasks_TaskStatusStatusId",
                 table: "KanbanTasks",
                 column: "TaskStatusStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_CompanyId",
+                table: "Messages",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ReceiverUserId",

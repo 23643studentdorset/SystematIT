@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastucture.DataAccess\Infrastucture.DataAccess.csproj" />
+    <ProjectReference Include="..\Infrastucture.Helpers\Infrastucture.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

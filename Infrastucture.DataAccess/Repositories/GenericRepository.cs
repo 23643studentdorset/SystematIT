@@ -32,6 +32,11 @@ namespace Infrastucture.DataAccess.Repositories
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
+        public async Task<IEnumerable<T>> FindListByCondition(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).ToListAsync();
+        }
+
         public async Task Insert(T entity)
         {
             if (entity == null)
