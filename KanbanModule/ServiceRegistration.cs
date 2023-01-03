@@ -10,6 +10,7 @@ namespace KanbanModule
         public static void AddKanbanModuleLayer(this IServiceCollection services)
         {
             services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<ICompanyService, CompanyService>();
         }
     }
 }
