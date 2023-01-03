@@ -23,6 +23,8 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.Receiver).AutoInclude();
 
+                entity.Navigation(e => e.Company).AutoInclude();
+
                 entity.HasOne(d => d.Sender)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
@@ -44,6 +46,8 @@ namespace Infrastucture.DataAccess.Data
                 entity.Navigation(e => e.Reporter).AutoInclude();
 
                 entity.Navigation(e => e.Assignee).AutoInclude();
+
+                entity.Navigation(e => e.Company).AutoInclude();
 
                 entity.HasOne(d => d.TaskStatus)
                     .WithMany()
@@ -81,6 +85,8 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
 
+                entity.Navigation(e => e.Company).AutoInclude();                   
+
                 entity.HasQueryFilter(p => p.Active);
 
                 entity.Property(e => e.Name)
@@ -102,6 +108,7 @@ namespace Infrastucture.DataAccess.Data
                     .HasConstraintName("FK_Store_Company_CompanyId");
             });
 
+
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
@@ -115,6 +122,11 @@ namespace Infrastucture.DataAccess.Data
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Navigation(e => e.Company).AutoInclude();
             });
         }
 
@@ -179,9 +191,5 @@ namespace Infrastucture.DataAccess.Data
                     }
                 );
         }
-       
-
-        
-
     }
 }

@@ -4,6 +4,7 @@ using Infrastucture.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230103130030_SystematITDb3")]
+    partial class SystematITDb3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,8 +426,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "LzzlWv4loKCUMO0AWFIAbAvrUXfi6RkeUueQ7FNLjyg=",
-                            Salt = "cLj+BrpTPc5GyU3+Wz31ig=="
+                            Password = "5AtSUsG+OS43QltImuOTTTbam7yx6hBvoEHlZr4P/yQ=",
+                            Salt = "i2aySrxlt4EEoKBxgOfBcg=="
                         });
                 });
 
