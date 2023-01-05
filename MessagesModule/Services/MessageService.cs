@@ -48,15 +48,21 @@ namespace MessagesModule.Services
         {
             try
             {
+                var sender = await _userRepository.Get(request.SenderId);
+                var receiver = await _userRepository.Get(request.ReceiverId);
                 var message = new Message()
                 {
                     Content = request.Content,
-                    Company = await _companyRepository.Get(2),
-                    Sender = await _userRepository.Get(request.SenderId),
-                    Receiver = await _userRepository.Get(request.ReceiverId),
+                    Sender = sender,
+                    Receiver = receiver,
+                    Company = await _companyRepository.Get(sender.CompanyId),
                     Time = DateTime.Now,
                 };
-                 await _messageRepository.Insert(message);
+
+                if (sender != null && receiver != null && sender.Company.Equals(receiver.Company))
+                {
+                    await _messageRepository.Insert(message);                    
+                }
                 return message.MessageId;
             }
             catch (Exception)

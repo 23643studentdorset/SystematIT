@@ -20,6 +20,8 @@ namespace DataModel
 
         public string Address { get; set; }
 
+        public int CompanyId { get; set; }
+
         public Company Company { get; set; }
 
         public DateTime DOB { get; set; }
@@ -27,6 +29,8 @@ namespace DataModel
         public string Password { get; set; }
 
         public string Salt { get; set; }
+
+        public IList<UserRole> UserRoles { get; set; }
 
     }
 }

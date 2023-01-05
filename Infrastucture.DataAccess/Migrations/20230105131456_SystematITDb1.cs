@@ -28,6 +28,20 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.RoleId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -187,6 +201,30 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRole",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRole", x => new { x.RoleId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserRole_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRole_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KanbanTasks",
                 columns: table => new
                 {
@@ -276,32 +314,56 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Companies",
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
-                values: new object[] { 1, true, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chocolates Company", "Butlers", "+353864069750" });
+                values: new object[,]
+                {
+                    { 1, true, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IT Company", "SystematIT", "+353833057491" }
+                });
 
             migrationBuilder.InsertData(
-                table: "Companies",
-                columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
-                values: new object[] { 2, true, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IT Company", "SystematIT", "+353833057491" });
+                table: "Role",
+                columns: new[] { "RoleId", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Admin user access", "Admin" },
+                    { 2, "Manager access", "Manager" },
+                    { 3, "Regular access", "Regular" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "Hl56sCQ/fJgIbU+1yg2gnqVFU0V2zNQaSQ+oQf84w8Y=", "ZXdghw1NUmSeyovdYZqNfw==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "yfDtsJi6YaqOOEZILYiFIo8CL2cO1nlImUC3S6R93i8=", "1Z+juO73tNLwAcMA/t1e3g==" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "wJS/sfxXemY6tRxb9UHwZ3Rw2q0v+Uf6XZlXWSH4PPc=", "ZBcCxDNTMWoK0kEmQg9B7w==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" });
-
-            migrationBuilder.InsertData(
-                table: "Departments",
-                columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 2, true, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" });
+                values: new object[,]
+                {
+                    { 1, true, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+
+            migrationBuilder.InsertData(
+                table: "UserRole",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 1 },
+                    { 3, 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_CreatedByUserId",
@@ -394,6 +456,11 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "TaskKanbanTaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserRole_UserId",
+                table: "UserRole",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_CompanyId",
                 table: "Users",
                 column: "CompanyId");
@@ -408,7 +475,13 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "TaskHistories");
 
             migrationBuilder.DropTable(
+                name: "UserRole");
+
+            migrationBuilder.DropTable(
                 name: "KanbanTasks");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Departments");

@@ -16,6 +16,7 @@ namespace Infrastucture.DataAccess
             //Database.SetInitializer<ApplicationDbContext>(new CreateDatabaseIfNotExists<ApplicationDbContext>());
         }
 
+        public DbSet<Company> Companies { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<KanbanTask> KanbanTasks { get; set; }
@@ -23,7 +24,7 @@ namespace Infrastucture.DataAccess
         public DbSet<Message> Messages { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<TaskHistory> TaskHistories { get; set; }
-        public DbSet<Company> Companies { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -60,7 +60,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Chocolates Company",
                             Name = "Butlers",
@@ -70,7 +70,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "IT Company",
                             Name = "SystematIT",
@@ -123,7 +123,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -132,7 +132,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -233,6 +233,47 @@ namespace Infrastucture.DataAccess.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("DataModel.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Description = "Admin user access",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Description = "Manager access",
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            Description = "Regular access",
+                            Name = "Regular"
+                        });
+                });
+
             modelBuilder.Entity("DataModel.Status", b =>
                 {
                     b.Property<int>("StatusId")
@@ -326,7 +367,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 3, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -424,8 +465,58 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "LzzlWv4loKCUMO0AWFIAbAvrUXfi6RkeUueQ7FNLjyg=",
-                            Salt = "cLj+BrpTPc5GyU3+Wz31ig=="
+                            Password = "yfDtsJi6YaqOOEZILYiFIo8CL2cO1nlImUC3S6R93i8=",
+                            Salt = "1Z+juO73tNLwAcMA/t1e3g=="
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Address = "28 Test Adress",
+                            CompanyId = 1,
+                            DOB = new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "charlieshein@buttlers.com",
+                            FirstName = "Charlie",
+                            LastName = "Shein",
+                            Mobile = "0878352233",
+                            Password = "wJS/sfxXemY6tRxb9UHwZ3Rw2q0v+Uf6XZlXWSH4PPc=",
+                            Salt = "ZBcCxDNTMWoK0kEmQg9B7w=="
+                        });
+                });
+
+            modelBuilder.Entity("DataModel.UserRole", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRole");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            UserId = 2
                         });
                 });
 
@@ -603,9 +694,38 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("DataModel.UserRole", b =>
+                {
+                    b.HasOne("DataModel.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataModel.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DataModel.KanbanTask", b =>
                 {
                     b.Navigation("Histories");
+                });
+
+            modelBuilder.Entity("DataModel.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("DataModel.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

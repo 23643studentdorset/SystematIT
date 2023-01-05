@@ -7,6 +7,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
+using Infrastucture.Helpers;
+using DataModel;
 
 namespace Infrastucture.Identity.Services
 {
@@ -20,37 +22,30 @@ namespace Infrastucture.Identity.Services
             _userRepository = userRepository;
             _iconfiguration = iConfiguration;
         }
-        public async Task<object> Login(AuthRequest request)
+        public async Task<object?> Login(AuthRequest request)
         {           
             try
             {
-                var inconmingEncryptedPassword = " ";
-                var result = await _userRepository.FindByCondition(x => x.Email == request.Email);
                 
-                if(result != null)
-                {
-                    inconmingEncryptedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password + result.Salt)));
-                }  
-                    
-                    
-               
-                if (result != null && result.Password.Equals(inconmingEncryptedPassword))
-                {
+                var user = await _userRepository.FindByCondition(x => x.Email == request.Email);
+
+                if (user != null && PasswordEncryption.IsValidPassword(request.Password, user.Password, user.Salt))
+                { 
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_iconfiguration["JWT:Key"]));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                     var tokenOptions = new JwtSecurityToken(
                         issuer: _iconfiguration["JWT:Issuer"],
                         audience: _iconfiguration["JWT:Audience"],
-                        claims: new List<Claim>(),
+                        claims: GetClaimsForToken(user),
                         expires: DateTime.Now.AddMinutes(60),
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                     return new { Token = tokenString,
-                                 User = result.UserId,
-                        result.FirstName,
-                        result.LastName,
-                        result.Email};
+                                 User = user.UserId,
+                        user.FirstName,
+                        user.LastName,
+                        user.Email};
                 }else
                 {
                     return null;
@@ -61,6 +56,22 @@ namespace Infrastucture.Identity.Services
             {
                 throw;
             }
+        }
+
+        private List<Claim> GetClaimsForToken(User user)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim("Email", user.Email),
+                new Claim("UserId", user.UserId.ToString())
+            };
+
+            foreach (var userRole in user.UserRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            }
+
+            return claims;
         }
     }
 }

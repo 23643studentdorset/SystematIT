@@ -14,6 +14,13 @@ namespace Infrastucture.Helpers
             return (hashedPassword, salt);
         }
 
+        public static bool IsValidPassword(string password, string hashPassword, string salt)
+        {
+            var inconmingEncryptedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(password + salt)));
+            if (inconmingEncryptedPassword.Equals(hashPassword)) return true;
+            return false;
+        }
+
         private static byte[] GenerateSalt()
         {
             byte[] salt = new byte[16];

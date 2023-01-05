@@ -1,18 +1,20 @@
 ﻿using DataModel;
 using Infrastucture.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Infrastucture.DataAccess.Data
 {
     public class DbInitializer
     {
         protected readonly ModelBuilder modelBuilder;
+        //private readonly IConfiguration _iconfiguration;
 
         public DbInitializer(ModelBuilder modelBuilder)
         {
             this.modelBuilder = modelBuilder;
+            //_iconfiguration = iConfiguration;
         }
 
         public void EntityDefinition()
@@ -23,7 +25,7 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.Receiver).AutoInclude();
 
-                entity.Navigation(e => e.Company).AutoInclude();
+                //entity.Navigation(e => e.Company).AutoInclude();
 
                 entity.HasOne(d => d.Sender)
                     .WithMany()
@@ -47,7 +49,7 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.Assignee).AutoInclude();
 
-                entity.Navigation(e => e.Company).AutoInclude();
+                //entity.Navigation(e => e.Company).AutoInclude();
 
                 entity.HasOne(d => d.TaskStatus)
                     .WithMany()
@@ -85,7 +87,7 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
 
-                entity.Navigation(e => e.Company).AutoInclude();                   
+                //entity.Navigation(e => e.Company).AutoInclude();                   
 
                 entity.HasQueryFilter(p => p.Active);
 
@@ -126,70 +128,131 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Navigation(e => e.Company).AutoInclude();
+                //entity.Navigation(e => e.Company).AutoInclude();
+                entity.Navigation(e => e.UserRoles).AutoInclude();
+            });
+
+            modelBuilder.Entity<UserRole>(entity => { 
+                entity.HasKey(sc => new {sc.RoleId, sc.UserId});
+                entity.Navigation(e => e.Role).AutoInclude();
             });
         }
 
         public void Seed()
-        {
-            var company_test_1 = new Company { CompanyId = 1, Active = true, Description = "Chocolates Company", CreatedOn = DateTime.Today, Name = "Butlers", PhoneNumber = "+353864069750"};
-            var company_test_2 = new Company { CompanyId = 2, Active = true, Description = "IT Company", CreatedOn = DateTime.Today, Name = "SystematIT", PhoneNumber = "+353833057491" };
+        {                     
 
-            var passwordHashed = PasswordEncryption.SaltAndHashPassword("secret1");
-                      
-            modelBuilder.Entity<Company>().HasData(company_test_1);
-            modelBuilder.Entity<Company>().HasData(company_test_2);
-            
-            modelBuilder.Entity<User>()
-                .HasData(new
+            var companies = new List<Company>()
+            {
+                new Company { CompanyId = 1, Active = true, Description = "Chocolates Company", CreatedOn = DateTime.Today, Name = "Butlers", PhoneNumber = "+353864069750"},
+                new Company { CompanyId = 2, Active = true, Description = "IT Company", CreatedOn = DateTime.Today, Name = "SystematIT", PhoneNumber = "+353833057491" }
+            };
+
+            var roles = new List<Role>() 
+            {
+                new Role() { RoleId = 1, Name="Admin", Description = "Admin user access" },
+                new Role() { RoleId = 2, Name="Manager", Description = "Manager access" },
+                new Role() { RoleId = 3, Name="Regular", Description = "Regular access" },
+            };
+
+            var passwordHashedUser1 = PasswordEncryption.SaltAndHashPassword("secret1");
+            var passwordHashedUser2 = PasswordEncryption.SaltAndHashPassword("secret2");
+
+            var firstUser = new User 
+            {
+                UserId = 1,
+                FirstName = "Luciano",
+                LastName = "Gimenez",
+                Address = "35 Test Adress",
+                DOB = new DateTime(1989, 04, 10),
+                Email = "lucianoGimenez@gmail.com",
+                Mobile = "0838352063",
+                CompanyId = companies[1].CompanyId,
+                Password = passwordHashedUser1.Item1,
+                Salt = passwordHashedUser1.Item2,
+            };
+
+            var secondUser = new User
+            {
+                UserId = 2,
+                FirstName = "Charlie",
+                LastName = "Shein",
+                Address = "28 Test Adress",
+                DOB = new DateTime(1988, 05, 11),
+                Email = "charlieshein@buttlers.com",
+                Mobile = "0878352233",
+                CompanyId = companies[0].CompanyId,
+                Password = passwordHashedUser2.Item1,
+                Salt = passwordHashedUser2.Item2,
+            };
+
+            var userRoles = new List<UserRole>()
+            {
+                new UserRole
                 {
-                    UserId = 1,
-                    FirstName = "Luciano",
-                    LastName = "Gimenez",
-                    Address = "35 Test Adress",
-                    DOB = new DateTime(1989, 04, 10),
-                    Email = "lucianoGimenez@gmail.com",
-                    Mobile = "0838352063",
-                    CompanyId = company_test_2.CompanyId,
-                    Password = passwordHashed.Item1,
-                    Salt = passwordHashed.Item2,
+                    UserId = firstUser.UserId,
+                    RoleId = roles.ToArray()[0].RoleId
+                },
+                new UserRole
+                {
+                    UserId = firstUser.UserId,
+                    RoleId = roles.ToArray()[1].RoleId
+                },
+                new UserRole
+                {
+                    UserId = firstUser.UserId,
+                    RoleId = roles.ToArray()[2].RoleId
+                },
+                new UserRole
+                {
+                    UserId = secondUser.UserId,
+                    RoleId = roles.ToArray()[2].RoleId
+                }
+            };
 
-                });
+            var users = new List<User>() { firstUser, secondUser };
+
+            modelBuilder.Entity<Company>().HasData(companies);
+
+            modelBuilder.Entity<Role>().HasData(roles);
+
+            modelBuilder.Entity<User>().HasData(users);
 
             modelBuilder.Entity<Store>()
-                .HasData(
-                new
-                {
-                    StoreId = 1,
-                    Name = "Ballsbridge",
-                    Active = true,
-                    CompanyId = company_test_1.CompanyId,
-                    CreatedByUserId = 1,
-                    CreatedOn = DateTime.Today,
-                    Description = "Cafe"
-                });
-          
+              .HasData(
+              new
+              {
+                  StoreId = 1,
+                  Name = "Ballsbridge",
+                  Active = true,
+                  CompanyId = companies[0].CompanyId,
+                  CreatedByUserId = firstUser.UserId,
+                  CreatedOn = DateTime.Today,
+                  Description = "Cafe"
+              });
+
             modelBuilder.Entity<Department>()
                 .HasData(
                 new
-                    {
-                        DepartmentId = 1,
-                        Name = "HR",
-                        Description = "Human Resources",
-                        Active = true,
-                        CreatedByUserId = 1,
-                        CreatedOn = DateTime.Today
-                    },
+                {
+                    DepartmentId = 1,
+                    Name = "HR",
+                    Description = "Human Resources",
+                    Active = true,
+                    CreatedByUserId = firstUser.UserId,
+                    CreatedOn = DateTime.Today
+                },
                 new
-                    {
-                        DepartmentId = 2,
-                        Name = "Finance",
-                        Description = "Finance",
-                        Active = true,
-                        CreatedByUserId = 1,
-                        CreatedOn = DateTime.Today
-                    }
-                );
+                {
+                    DepartmentId = 2,
+                    Name = "Finance",
+                    Description = "Finance",
+                    Active = true,
+                    CreatedByUserId = firstUser.UserId,
+                    CreatedOn = DateTime.Today
+                });
+
+            modelBuilder.Entity<UserRole>()
+                .HasData(userRoles);
         }
     }
 }
