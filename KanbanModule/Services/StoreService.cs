@@ -115,11 +115,11 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<bool> DeleteStore(int Id)
+        public async Task<bool> DeleteStore(DeleteStoreRequest request)
         {
             try
             {
-                var storeToDelete = await _storeRepository.Get(Id);
+                var storeToDelete = await _storeRepository.Get(request.StoreId);
                 storeToDelete.Active = false;
                 storeToDelete.ModifiedBy = await _userRepository.Get(1);
                 storeToDelete.ModifiedOn = DateTime.Now;
