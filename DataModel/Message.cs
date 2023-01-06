@@ -12,6 +12,8 @@ namespace DataModel
         
         public string Content { get; set; }
 
+        public int CompanyId { get; set; }
+
         public Company Company { get; set; }
 
         public User Sender { get; set; }

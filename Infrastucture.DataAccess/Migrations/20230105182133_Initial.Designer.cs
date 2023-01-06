@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230105131456_SystematITDb1")]
-    partial class SystematITDb1
+    [Migration("20230105182133_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -467,8 +467,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "yfDtsJi6YaqOOEZILYiFIo8CL2cO1nlImUC3S6R93i8=",
-                            Salt = "1Z+juO73tNLwAcMA/t1e3g=="
+                            Password = "dUK4ewTIKeOLOZeMZHrki8CjJ8FY9iafSAfZtAgyoE0=",
+                            Salt = "ttYpATmTIsqOdZYlcpvK6g=="
                         },
                         new
                         {
@@ -480,8 +480,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Charlie",
                             LastName = "Shein",
                             Mobile = "0878352233",
-                            Password = "wJS/sfxXemY6tRxb9UHwZ3Rw2q0v+Uf6XZlXWSH4PPc=",
-                            Salt = "ZBcCxDNTMWoK0kEmQg9B7w=="
+                            Password = "IQKisu9UaXkJSMEn6VsmvSajYNFsZVE/wYO4XvCra08=",
+                            Salt = "IW8R9b9TKsYmrMohYohDvg=="
                         });
                 });
 
@@ -690,8 +690,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_User_Company_CompanyId");
 
                     b.Navigation("Company");
                 });

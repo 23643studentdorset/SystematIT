@@ -79,6 +79,8 @@ builder.Services.AddSwaggerGen(opt =>
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddOptions();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

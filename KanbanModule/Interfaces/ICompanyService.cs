@@ -13,8 +13,8 @@ namespace KanbanModule.Interfaces
         Task<IEnumerable<Company>> Get();
         Task<Company> GetById(int id);
         Task<Company> GetByName(string name);
-        Task<int> AddCompany(AddCompanyRequest Company);
-        Task<bool> UpdateCompany(UpdateCompanyRequest Company);
+        Task<int> AddCompany(AddCompanyRequest company);
+        Task<bool> UpdateCompany(UpdateCompanyRequest company);
         Task<bool> DeleteCompany(int id);
     }
 }

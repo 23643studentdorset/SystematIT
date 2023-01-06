@@ -10,6 +10,8 @@
 
         public Department Department { get; set; }
 
+        public int CompanyId { get; set; }
+
         public Company Company { get; set; }
 
         public Store? Store { get; set; }

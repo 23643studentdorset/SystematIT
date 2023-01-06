@@ -55,7 +55,7 @@ namespace MessagesModule.Services
                     Content = request.Content,
                     Sender = sender,
                     Receiver = receiver,
-                    Company = await _companyRepository.Get(sender.CompanyId),
+                    CompanyId = sender.CompanyId,
                     Time = DateTime.Now,
                 };
 

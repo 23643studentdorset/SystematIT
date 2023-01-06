@@ -6,6 +6,10 @@ namespace KanbanModule.DTOs
     {
         [Required]
         [MaxLength(50)]
+        public int UserId { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         [MaxLength(1000)]

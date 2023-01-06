@@ -1,20 +1,19 @@
 ﻿using DataModel;
 using Infrastucture.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
+using Microsoft.Extensions.Options;
 
 namespace Infrastucture.DataAccess.Data
 {
     public class DbInitializer
     {
         protected readonly ModelBuilder modelBuilder;
-        //private readonly IConfiguration _iconfiguration;
+        
 
-        public DbInitializer(ModelBuilder modelBuilder)
+        public DbInitializer(ModelBuilder modelBuilder) 
         {
             this.modelBuilder = modelBuilder;
-            //_iconfiguration = iConfiguration;
+            
         }
 
         public void EntityDefinition()
@@ -130,6 +129,11 @@ namespace Infrastucture.DataAccess.Data
             {
                 //entity.Navigation(e => e.Company).AutoInclude();
                 entity.Navigation(e => e.UserRoles).AutoInclude();
+                
+                entity.HasOne(e => e.Company)
+                   .WithMany()
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasConstraintName("FK_User_Company_CompanyId");
             });
 
             modelBuilder.Entity<UserRole>(entity => { 
@@ -154,8 +158,8 @@ namespace Infrastucture.DataAccess.Data
                 new Role() { RoleId = 3, Name="Regular", Description = "Regular access" },
             };
 
-            var passwordHashedUser1 = PasswordEncryption.SaltAndHashPassword("secret1");
-            var passwordHashedUser2 = PasswordEncryption.SaltAndHashPassword("secret2");
+            var passwordHashedUser1 = PasswordEncryption.SaltAndHashPassword(DataAccessSettings.SecretUserAdminPassword);
+            var passwordHashedUser2 = PasswordEncryption.SaltAndHashPassword(DataAccessSettings.SecretUserTestPassword);
 
             var firstUser = new User 
             {
@@ -190,22 +194,22 @@ namespace Infrastucture.DataAccess.Data
                 new UserRole
                 {
                     UserId = firstUser.UserId,
-                    RoleId = roles.ToArray()[0].RoleId
+                    RoleId = roles[0].RoleId
                 },
                 new UserRole
                 {
                     UserId = firstUser.UserId,
-                    RoleId = roles.ToArray()[1].RoleId
+                    RoleId = roles[1].RoleId
                 },
                 new UserRole
                 {
                     UserId = firstUser.UserId,
-                    RoleId = roles.ToArray()[2].RoleId
+                    RoleId = roles[2].RoleId
                 },
                 new UserRole
                 {
                     UserId = secondUser.UserId,
-                    RoleId = roles.ToArray()[2].RoleId
+                    RoleId = roles[2].RoleId
                 }
             };
 
