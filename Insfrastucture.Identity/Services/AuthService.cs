@@ -62,9 +62,9 @@ namespace Infrastucture.Identity.Services
         {
             var claims = new List<Claim>()
             {
-                new Claim("Email", user.Email),
-                new Claim("UserId", user.UserId.ToString()),
-                new Claim("CompanyId", user.CompanyId.ToString()),
+                new Claim(IdentitySettings.ClaimEmail, user.Email),
+                new Claim(IdentitySettings.ClaimUserId, user.UserId.ToString()),
+                new Claim(IdentitySettings.ClaimCompanyId, user.CompanyId.ToString()),
             };
 
             foreach (var userRole in user.UserRoles)

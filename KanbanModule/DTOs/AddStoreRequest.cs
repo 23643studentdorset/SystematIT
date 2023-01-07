@@ -4,9 +4,6 @@ namespace KanbanModule.DTOs
 {
     public class AddStoreRequest
     {
-        [Required]
-        [MaxLength(50)]
-        public int UserId { get; set; }
 
         [Required]
         [MaxLength(50)]

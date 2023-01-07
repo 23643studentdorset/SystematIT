@@ -9,7 +9,8 @@ namespace MessagesModule.DTOs
 {
     public class SendMessageRequest
     {
-        public int SenderId { get; set; }
+        [Required]
+        [MaxLength(int.MaxValue)]
         public int ReceiverId { get; set; }
 
         [Required]

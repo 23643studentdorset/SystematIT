@@ -11,12 +11,14 @@ namespace KanbanModule.Services
         private readonly IStoreRepository _storeRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly ICurrentUser _currentUser;
 
-        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository, ICompanyRepository companyRepository)
+        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository, ICompanyRepository companyRepository, ICurrentUser currentUser)
         {
             _storeRepository = storeRepository;
             _userRepository = userRepository;
-            _companyRepository = companyRepository; 
+            _companyRepository = companyRepository;
+            _currentUser = currentUser;
         }
         public async Task<IEnumerable<Store>> Get()
         {
@@ -78,9 +80,9 @@ namespace KanbanModule.Services
                 {
                     Name = request.Name,
                     Description = request.Description,
-                    Company = await _companyRepository.Get(1),
+                    Company = await _companyRepository.Get(_currentUser.CompanyId),
                     Active = true,
-                    CreatedBy = await _userRepository.Get(1),
+                    CreatedBy = await _userRepository.Get(_currentUser.UserId),
                     CreatedOn = DateTime.Now,
                 };
                 await _storeRepository.Insert(store);
@@ -97,11 +99,8 @@ namespace KanbanModule.Services
             try
             {
                 var storeToUpdate = await _storeRepository.Get(request.StoreId);
-                //request.Name != null ? storeToUpdate.Name = request.Name;
-                if (request.Name != null)
-                {
-                    storeToUpdate.Name = request.Name;
-                }
+                
+                storeToUpdate.Name = request.Name;               
                 storeToUpdate.Description = request.Description;
                 storeToUpdate.ModifiedBy = await _userRepository.Get(1);
                 storeToUpdate.ModifiedOn = DateTime.Now;
@@ -115,13 +114,13 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<bool> DeleteStore(DeleteStoreRequest request)
+        public async Task<bool> DeleteStore(int id)
         {
             try
             {
-                var storeToDelete = await _storeRepository.Get(request.StoreId);
+                var storeToDelete = await _storeRepository.Get(id);
                 storeToDelete.Active = false;
-                storeToDelete.ModifiedBy = await _userRepository.Get(1);
+                storeToDelete.ModifiedBy = await _userRepository.Get(_currentUser.UserId);
                 storeToDelete.ModifiedOn = DateTime.Now;
 
                 await _storeRepository.Update(storeToDelete);

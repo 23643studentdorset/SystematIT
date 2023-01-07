@@ -131,11 +131,11 @@ namespace WebApi.Controllers
 
         [HttpDelete("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> DeleteStore(DeleteStoreRequest request)
+        public async Task<IActionResult> DeleteStore(id)
         {
             try
             {
-                var result = await _storeService.DeleteStore(request);
+                var result = await _storeService.DeleteStore(id);
                 return Ok (result);
             }
             catch (Exception exception)

@@ -7,7 +7,7 @@ using WebApi.Attributes;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
@@ -86,23 +86,6 @@ namespace WebApi.Controllers
             {
                 _logger.LogError("Unexpected exception on Add company ", exception);
                 return BadRequest(exception.Message);
-            }
-        }
-
-        [HttpPut]
-        [ValidateModel]
-        public async Task<IActionResult> PutUpdateCompany(UpdateCompanyRequest request)
-        {
-            try
-            {
-                var result = await _companyService.UpdateCompany(request);
-                return Ok(result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Unexpected exception on Update company ", exception);
-                return BadRequest(exception.Message);
-
             }
         }
 

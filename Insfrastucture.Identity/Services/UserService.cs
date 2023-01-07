@@ -1,4 +1,5 @@
 ﻿using DataModel;
+using DataModel.Enums;
 using Infrastucture.DataAccess.Interfaces;
 using Infrastucture.Helpers;
 using Infrastucture.Identity.DTOs;
@@ -41,8 +42,10 @@ namespace Infrastucture.Identity.Services
                     DOB = DateTime.Parse(request.Dob),
                     Password = hashedPassword.Item1,
                     Salt = hashedPassword.Item2,
-
+                    
                 };
+                //user.UserRoles = new List<UserRole>() { new UserRole() { RoleId = (int)RoleKeys.Regular, User = user } };
+
                  await _userRepository.Insert(user);
                  return user.UserId;
             }

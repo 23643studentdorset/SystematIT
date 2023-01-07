@@ -19,8 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddKanbanModuleLayer();
-builder.Services.AddAuthLayer();
-builder.Services.AddUsersLayer();
+builder.Services.AddIdentityLayer();
 builder.Services.AddMessageLayer();
 
 builder.Services.AddControllers();
@@ -80,6 +79,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddOptions();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

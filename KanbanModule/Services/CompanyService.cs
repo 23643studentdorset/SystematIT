@@ -2,11 +2,6 @@
 using Infrastucture.DataAccess.Interfaces;
 using KanbanModule.DTOs;
 using KanbanModule.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KanbanModule.Services
 {
@@ -72,23 +67,6 @@ namespace KanbanModule.Services
                 };
                 await _companyRepository.Insert(company);
                 return company.CompanyId;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> UpdateCompany(UpdateCompanyRequest request)
-        {
-            try
-            {
-                var companyToUpdate = await _companyRepository.Get(request.CompanyId);
-                companyToUpdate.Name = request.Name;
-                companyToUpdate.Description = request.Description;
-                companyToUpdate.PhoneNumber = request.PhoneNumber;
-                await _companyRepository.Update(companyToUpdate);
-                return true;
             }
             catch (Exception)
             {

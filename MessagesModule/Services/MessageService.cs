@@ -10,12 +10,14 @@ namespace MessagesModule.Services
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly ICurrentUser _currentUser;
 
-        public MessageService(IUserRepository userRepository, ICompanyRepository companyRepository, IMessageRepository messageRepository)
+        public MessageService(IUserRepository userRepository, ICompanyRepository companyRepository, IMessageRepository messageRepository, ICurrentUser currentUser)
         {
             _userRepository = userRepository;
             _companyRepository = companyRepository;
-            _messageRepository = messageRepository; 
+            _messageRepository = messageRepository;
+            _currentUser = currentUser; 
         }
 
         public async Task<IEnumerable<Message>> GetByReceiverId(int id)
@@ -48,22 +50,18 @@ namespace MessagesModule.Services
         {
             try
             {
-                var sender = await _userRepository.Get(request.SenderId);
-                var receiver = await _userRepository.Get(request.ReceiverId);
+                              
                 var message = new Message()
                 {
                     Content = request.Content,
-                    Sender = sender,
-                    Receiver = receiver,
-                    CompanyId = sender.CompanyId,
+                    Sender = await _userRepository.Get(_currentUser.UserId),
+                    Receiver = await _userRepository.Get(request.ReceiverId),
+                    CompanyId = await _companyRepository.Get(_currentUser.CompanyId),
                     Time = DateTime.Now,
                 };
 
-                if (sender != null && receiver != null && sender.Company.Equals(receiver.Company))
-                {
-                    await _messageRepository.Insert(message);                    
-                }
-                return message.MessageId;
+               await _messageRepository.Insert(message);                    
+               return message.MessageId;
             }
             catch (Exception)
             {

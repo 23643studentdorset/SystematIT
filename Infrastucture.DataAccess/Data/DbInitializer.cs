@@ -112,6 +112,8 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<Department>(entity =>
             {
+                entity.HasQueryFilter(p => p.Active);
+
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
@@ -120,6 +122,8 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<Status>(entity =>
             {
+                entity.HasQueryFilter(p => p.Active);
+
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
 
                 entity.Navigation(e => e.ModifiedBy).AutoInclude();
@@ -139,6 +143,11 @@ namespace Infrastucture.DataAccess.Data
             modelBuilder.Entity<UserRole>(entity => { 
                 entity.HasKey(sc => new {sc.RoleId, sc.UserId});
                 entity.Navigation(e => e.Role).AutoInclude();
+            });
+
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.HasQueryFilter(p => p.Active);
             });
         }
 

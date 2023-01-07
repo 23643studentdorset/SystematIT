@@ -14,7 +14,6 @@ namespace KanbanModule.Interfaces
         Task<Company> GetById(int id);
         Task<Company> GetByName(string name);
         Task<int> AddCompany(AddCompanyRequest company);
-        Task<bool> UpdateCompany(UpdateCompanyRequest company);
         Task<bool> DeleteCompany(int id);
     }
 }

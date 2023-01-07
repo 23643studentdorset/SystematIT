@@ -22,7 +22,7 @@ namespace Infrastucture.DataAccess.Repositories
             return await _entities.ToListAsync();
         }
 
-        public async Task<T> Get(int id)
+        public virtual async Task<T> Get(int id)
         {
             return await _entities.FindAsync(id);
         }
@@ -37,7 +37,7 @@ namespace Infrastucture.DataAccess.Repositories
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
-        public async Task Insert(T entity)
+        public virtual async Task Insert(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
@@ -45,7 +45,7 @@ namespace Infrastucture.DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(T entity)
+        public virtual async Task Update(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
@@ -53,7 +53,7 @@ namespace Infrastucture.DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
