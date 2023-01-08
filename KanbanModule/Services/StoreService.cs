@@ -1,5 +1,6 @@
 ﻿using DataModel;
 using Infrastucture.DataAccess.Interfaces;
+using Infrastucture.Identity.Interfaces;
 using KanbanModule.DTOs;
 using KanbanModule.Interfaces;
 
@@ -99,14 +100,16 @@ namespace KanbanModule.Services
             try
             {
                 var storeToUpdate = await _storeRepository.Get(request.StoreId);
+                if (storeToUpdate == null) new Exception("Store does not exists in the system.");
                 
-                storeToUpdate.Name = request.Name;               
+                storeToUpdate.Name = request.Name;
                 storeToUpdate.Description = request.Description;
                 storeToUpdate.ModifiedBy = await _userRepository.Get(1);
                 storeToUpdate.ModifiedOn = DateTime.Now;
 
                 await _storeRepository.Update(storeToUpdate);
                 return true;
+                               
             }
             catch (Exception)
             {
@@ -119,12 +122,15 @@ namespace KanbanModule.Services
             try
             {
                 var storeToDelete = await _storeRepository.Get(id);
+                if (storeToDelete == null) new Exception("Store does not exists in the system.");
+                
                 storeToDelete.Active = false;
                 storeToDelete.ModifiedBy = await _userRepository.Get(_currentUser.UserId);
                 storeToDelete.ModifiedOn = DateTime.Now;
 
                 await _storeRepository.Update(storeToDelete);
                 return true;
+
             }
             catch (Exception)
             {

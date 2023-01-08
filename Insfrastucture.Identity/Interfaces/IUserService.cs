@@ -12,7 +12,7 @@ namespace Infrastucture.Identity.Interfaces
     {
         Task<IEnumerable<User>> Get();
         Task<User> GetById(int id);
-        Task<User> GetByName(string name);
+        Task<User> GetByName(string firstName, string lastName);
         Task<User> GetByEmail(string email);
         Task<IEnumerable<User>> GetByCompany(string company);
         Task<int> AddUserRequest(AddUserRequest user);

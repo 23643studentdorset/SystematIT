@@ -58,13 +58,13 @@ namespace WebApi.Controllers
         [HttpGet("name")]
         [ValidateModel]
         [Authorize]
-        public async Task<IActionResult> GetByName(string name)
+        public async Task<IActionResult> GetByName(string firstName, string lastName)
         {
             try
             {
-                var result = await _userService.GetByName(name);
+                var result = await _userService.GetByName(firstName, lastName);
                 if (result == null)
-                    return StatusCode(StatusCodes.Status204NoContent, $"No user found with name: {name}");
+                    return StatusCode(StatusCodes.Status204NoContent, $"No user found with name: {firstName} {lastName}");
                 return Ok(result);
             }
             catch (Exception exception)

@@ -1,7 +1,9 @@
 ﻿using DataModel;
 using Infrastucture.DataAccess.Interfaces;
+using Infrastucture.Identity.Interfaces;
 using MessagesModule.DTOs;
 using MessagesModule.Interfaces;
+
 
 namespace MessagesModule.Services
 {
@@ -24,15 +26,17 @@ namespace MessagesModule.Services
         {
             try
             {
-                var result = await _messageRepository.FindListByCondition(x => x.Receiver.UserId == id);
-                return result;
+                var sender = await _userRepository.Get(_currentUser.UserId);
+                var messages = await _messageRepository.FindListByCondition(x => x.Receiver.UserId == id && x.Sender.UserId == sender.UserId);                                   
+                
+                return messages;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
+        /*
         public async Task<IEnumerable<Message>> GetBySenderId(int id)
         {
             try
@@ -45,7 +49,7 @@ namespace MessagesModule.Services
                 throw;
             }
         }
-
+        */
         public async Task<int> SendMessage(SendMessageRequest request)
         {
             try
@@ -56,7 +60,7 @@ namespace MessagesModule.Services
                     Content = request.Content,
                     Sender = await _userRepository.Get(_currentUser.UserId),
                     Receiver = await _userRepository.Get(request.ReceiverId),
-                    CompanyId = await _companyRepository.Get(_currentUser.CompanyId),
+                    CompanyId = _currentUser.CompanyId,
                     Time = DateTime.Now,
                 };
 

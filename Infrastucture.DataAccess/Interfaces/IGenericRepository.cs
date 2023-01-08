@@ -10,7 +10,9 @@ namespace Infrastucture.DataAccess.Interfaces
 
         Task<T> FindByCondition(Expression<Func<T, bool>> predicate);
 
-        Task<IEnumerable<T>> FindListByCondition(Expression<Func<T, bool>> predicate); 
+        Task<IEnumerable<T>> FindListByCondition(Expression<Func<T, bool>> predicate);
+        
+        //Task<IEnumerable<T>> FindListByTwoConditions(Expression<Func<T, bool>> predicate1, Expression<Func<T, bool>> predicate2);
 
         Task Insert(T entity);
         

@@ -131,7 +131,7 @@ namespace WebApi.Controllers
 
         [HttpDelete("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> DeleteStore(id)
+        public async Task<IActionResult> DeleteStore(int id)
         {
             try
             {

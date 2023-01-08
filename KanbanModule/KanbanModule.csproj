@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj" />
     <ProjectReference Include="..\Infrastucture.DataAccess\Infrastucture.DataAccess.csproj" />
+    <ProjectReference Include="..\Insfrastucture.Identity\Infrastucture.Identity.csproj" />
   </ItemGroup>
 
 </Project>

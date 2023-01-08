@@ -20,7 +20,7 @@ namespace WebApi.Controllers
             _messageService = messageService;
             _logger = logger;
         }
-
+        /*
         [HttpGet("senderId")]
         [ValidateModel]
         public async Task<IActionResult> GetBySenderId(int id)
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
                 return BadRequest(exception.Message);
             }
         }
-
+        */
         [HttpGet("receiverId")]
         [ValidateModel]
         public async Task<IActionResult> GetByReceiverId(int id)

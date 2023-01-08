@@ -9,27 +9,24 @@ namespace Infrastucture.Identity.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ICompanyRepository _companyRepository;
+        private readonly IUserRepository _userRepository;       
+        private readonly ICurrentUser _currentUser;
 
-        public UserService(IUserRepository userRepository, ICompanyRepository companyRepository)
+        public UserService(IUserRepository userRepository, ICurrentUser currentUser)
         { 
             _userRepository = userRepository;
-            _companyRepository = companyRepository; 
+            _currentUser = currentUser;
         }
 
         public async Task<int> AddUserRequest(AddUserRequest request)
         {
             try
             {
-                var company = await _companyRepository.FindByCondition(x => x.Name == request.Company);
-
-                if (company == null) new Exception("Company doesn't exist.");
 
                 var email = await _userRepository.FindByCondition(x => x.Email == request.Email);
 
                 if (email == null) new Exception("User already exists in the system.");
-
+                
                 var hashedPassword = PasswordEncryption.SaltAndHashPassword(request.Password);
                 var user = new User()
                 {
@@ -38,13 +35,13 @@ namespace Infrastucture.Identity.Services
                     Email = request.Email,
                     Mobile = request.Mobile,
                     Address = request.Address,
-                    Company = company,
+                    CompanyId = _currentUser.CompanyId,
                     DOB = DateTime.Parse(request.Dob),
                     Password = hashedPassword.Item1,
                     Salt = hashedPassword.Item2,
                     
                 };
-                //user.UserRoles = new List<UserRole>() { new UserRole() { RoleId = (int)RoleKeys.Regular, User = user } };
+                user.UserRoles = new List<UserRole>() { new UserRole() { RoleId = (int)RoleKeys.Regular, User = user } };
 
                  await _userRepository.Insert(user);
                  return user.UserId;
@@ -60,6 +57,8 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var userToDelete = await _userRepository.Get(id);
+                if (userToDelete == null) new Exception("User does not exists in the system.");
+
                 userToDelete.FirstName = "User Deleted";
                 userToDelete.Email = "User Deleted";
                 userToDelete.Address = "User Deleted";
@@ -120,6 +119,7 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var result = await _userRepository.Get(id);
+                if (result == null) new Exception("User does not exists in the system.");
                 return result;
             }
             catch (Exception)
@@ -128,11 +128,11 @@ namespace Infrastucture.Identity.Services
             }
         }
 
-        public async Task<User> GetByName(string name)
+        public async Task<User> GetByName(string firstName, string lastName)
         {
             try
             {
-                var result = await _userRepository.FindByCondition(x => x.FirstName + " " + x.LastName  == name);
+                var result = await _userRepository.FindByCondition(x => x.FirstName == firstName && x.LastName  == lastName);
                 return result;
             }
             catch (Exception)
@@ -148,6 +148,8 @@ namespace Infrastucture.Identity.Services
 
 
                 var UserToUpdate = await _userRepository.Get(request.UserId);
+                if (UserToUpdate == null) new Exception("User does not exists in the system.");
+
                 UserToUpdate.FirstName = request.FirstName;
                 UserToUpdate.LastName = request.LastName;
                 UserToUpdate.Mobile = request.Mobile;

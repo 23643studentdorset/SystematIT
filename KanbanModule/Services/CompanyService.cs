@@ -30,8 +30,9 @@ namespace KanbanModule.Services
         public async Task<Company> GetById(int id)
         {
             try
-            {
+            { 
                 var result = await _companyRepository.Get(id);
+                if (result == null) new Exception("Company does not exists in the system.");
                 return result;
             }
             catch (Exception)
@@ -79,11 +80,14 @@ namespace KanbanModule.Services
             try
             {
                 var companyToDelete = await _companyRepository.Get(Id);
+                if (companyToDelete == null) new Exception("Company does not exists in the system.");
+                
                 companyToDelete.Active = false;
                 companyToDelete.DeletedOn = DateTime.Now;
 
                 await _companyRepository.Update(companyToDelete);
                 return true;
+                
             }
             catch (Exception)
             {

@@ -1,8 +1,7 @@
 ﻿using Infrastucture.DataAccess.Interfaces;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-
-
 
 namespace Infrastucture.DataAccess.Repositories
 {
@@ -36,7 +35,13 @@ namespace Infrastucture.DataAccess.Repositories
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
-
+        /*
+        public async Task<IEnumerable<T>> FindListByTwoConditions(Expression<Func<T, bool>> predicate1, Expression<Func<T, bool>> predicate2)
+        {
+            var combinedPredicate = PredicateBuilder.And(predicate1, predicate2);
+            return await _context.Set<T>().Where(combinedPredicate).ToListAsync();
+        }
+        */
         public virtual async Task Insert(T entity)
         {
             if (entity == null)
