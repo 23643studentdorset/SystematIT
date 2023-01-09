@@ -20,8 +20,12 @@ namespace Infrastucture.DataAccess.Repositories
                 return _cache.Get<Company>(GetCacheKey(id));
 
             var companyDb = await base.Get(id);
-
-            SetCompanyCache(companyDb);
+           
+            if (companyDb != null)
+            {
+                SetCompanyCache(companyDb);
+            }
+                
 
             return companyDb;
         }

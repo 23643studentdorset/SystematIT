@@ -20,8 +20,8 @@ namespace Infrastucture.DataAccess.Repositories
                 return _cache.Get<User>(GetCacheKey(id));
 
             var userDb = await base.Get(id);
-
-            SetUserCache(userDb);
+            if (userDb != null)
+                SetUserCache(userDb);
 
             return userDb;
         }

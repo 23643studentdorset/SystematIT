@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastucture.DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,7 @@ namespace Infrastucture.DataAccess.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -316,8 +316,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -333,26 +333,26 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "dUK4ewTIKeOLOZeMZHrki8CjJ8FY9iafSAfZtAgyoE0=", "ttYpATmTIsqOdZYlcpvK6g==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "YehqQuwAHCOx+W/qpLFG9dFycG2gypUM3JmQe6IYx8w=", "dgeDUCX4AKiH6XJgHJB/bA==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "IQKisu9UaXkJSMEn6VsmvSajYNFsZVE/wYO4XvCra08=", "IW8R9b9TKsYmrMohYohDvg==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "Bqk0vGedREzrSDD0cWxVT280BoTAp++L3E6/2g0dsZU=", "4zTHMdBsa6S9AxPNWnD9UQ==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",

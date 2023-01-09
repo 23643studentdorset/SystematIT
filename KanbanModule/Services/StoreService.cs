@@ -100,7 +100,7 @@ namespace KanbanModule.Services
             try
             {
                 var storeToUpdate = await _storeRepository.Get(request.StoreId);
-                if (storeToUpdate == null) new Exception("Store does not exists in the system.");
+                if (storeToUpdate == null) throw new Exception("Store does not exists in the system.");
                 
                 storeToUpdate.Name = request.Name;
                 storeToUpdate.Description = request.Description;
@@ -122,7 +122,7 @@ namespace KanbanModule.Services
             try
             {
                 var storeToDelete = await _storeRepository.Get(id);
-                if (storeToDelete == null) new Exception("Store does not exists in the system.");
+                if (storeToDelete == null) throw new Exception("Store does not exists in the system.");
                 
                 storeToDelete.Active = false;
                 storeToDelete.ModifiedBy = await _userRepository.Get(_currentUser.UserId);

@@ -10,7 +10,6 @@ namespace MessagesModule.DTOs
     public class SendMessageRequest
     {
         [Required]
-        [MaxLength(int.MaxValue)]
         public int ReceiverId { get; set; }
 
         [Required]

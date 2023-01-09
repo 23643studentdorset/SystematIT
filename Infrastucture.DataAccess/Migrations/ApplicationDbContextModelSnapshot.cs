@@ -36,7 +36,7 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedOn")
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -60,8 +60,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -70,8 +69,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -123,7 +121,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -132,7 +130,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -367,7 +365,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -465,8 +463,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "dUK4ewTIKeOLOZeMZHrki8CjJ8FY9iafSAfZtAgyoE0=",
-                            Salt = "ttYpATmTIsqOdZYlcpvK6g=="
+                            Password = "YehqQuwAHCOx+W/qpLFG9dFycG2gypUM3JmQe6IYx8w=",
+                            Salt = "dgeDUCX4AKiH6XJgHJB/bA=="
                         },
                         new
                         {
@@ -478,8 +476,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Charlie",
                             LastName = "Shein",
                             Mobile = "0878352233",
-                            Password = "IQKisu9UaXkJSMEn6VsmvSajYNFsZVE/wYO4XvCra08=",
-                            Salt = "IW8R9b9TKsYmrMohYohDvg=="
+                            Password = "Bqk0vGedREzrSDD0cWxVT280BoTAp++L3E6/2g0dsZU=",
+                            Salt = "4zTHMdBsa6S9AxPNWnD9UQ=="
                         });
                 });
 

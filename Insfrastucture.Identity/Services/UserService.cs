@@ -25,7 +25,7 @@ namespace Infrastucture.Identity.Services
 
                 var email = await _userRepository.FindByCondition(x => x.Email == request.Email);
 
-                if (email == null) new Exception("User already exists in the system.");
+                if (email == null) throw new Exception("User already exists in the system.");
                 
                 var hashedPassword = PasswordEncryption.SaltAndHashPassword(request.Password);
                 var user = new User()
@@ -57,7 +57,7 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var userToDelete = await _userRepository.Get(id);
-                if (userToDelete == null) new Exception("User does not exists in the system.");
+                if (userToDelete == null) throw new Exception("User does not exists in the system.");
 
                 userToDelete.FirstName = "User Deleted";
                 userToDelete.Email = "User Deleted";
@@ -79,7 +79,9 @@ namespace Infrastucture.Identity.Services
         {
             try
             {
+                
                 var result = await _userRepository.GetAll();
+                if (result == null) throw new Exception("User does not exists in the system.");
                 return result;
             }
             catch (Exception)
@@ -119,7 +121,7 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var result = await _userRepository.Get(id);
-                if (result == null) new Exception("User does not exists in the system.");
+                if (result == null) throw new Exception("User does not exists in the system.");
                 return result;
             }
             catch (Exception)
@@ -148,7 +150,7 @@ namespace Infrastucture.Identity.Services
 
 
                 var UserToUpdate = await _userRepository.Get(request.UserId);
-                if (UserToUpdate == null) new Exception("User does not exists in the system.");
+                if (UserToUpdate == null) throw new Exception("User does not exists in the system.");
 
                 UserToUpdate.FirstName = request.FirstName;
                 UserToUpdate.LastName = request.LastName;
