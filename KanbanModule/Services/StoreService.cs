@@ -1,4 +1,5 @@
-﻿using DataModel;
+﻿using AutoMapper;
+using DataModel;
 using Infrastucture.DataAccess.Interfaces;
 using Infrastucture.Identity.Interfaces;
 using KanbanModule.DTOs;
@@ -13,20 +14,23 @@ namespace KanbanModule.Services
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly ICurrentUser _currentUser;
+        private readonly IMapper _mapper;
 
-        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository, ICompanyRepository companyRepository, ICurrentUser currentUser)
+        public StoreService(IStoreRepository storeRepository, IUserRepository userRepository, ICompanyRepository companyRepository, ICurrentUser currentUser, IMapper mapper)
         {
             _storeRepository = storeRepository;
             _userRepository = userRepository;
             _companyRepository = companyRepository;
             _currentUser = currentUser;
+            _mapper = mapper;
         }
-        public async Task<IEnumerable<Store>> Get()
+        public async Task<IEnumerable<StoreDto>> GetAll()
         {
             try
             {
                 var result = await _storeRepository.GetAll();
-                return result;
+                var storeMapper = _mapper.Map<IEnumerable<StoreDto>>(result);
+                return storeMapper;
             }
             catch (Exception)
             {
@@ -34,12 +38,13 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<Store> GetById(int id)
+        public async Task<StoreDto> GetById(int id)
         {
             try
             {
                 var result = await _storeRepository.Get(id);
-                return result;
+                var storeMapper = _mapper.Map<StoreDto>(result);
+                return storeMapper;
             }
             catch (Exception)
             {
@@ -47,12 +52,13 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<Store> GetByName(string name)
+        public async Task<StoreDto> GetByName(string name)
         {
             try
             {
                 var result = await _storeRepository.FindByCondition(x => x.Name == name);
-                return result;
+                var storeMapper = _mapper.Map<StoreDto>(result);
+                return storeMapper;
             }
             catch (Exception)
             {
@@ -60,12 +66,13 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<IEnumerable<Store>> GetByCompany (string companyName)
+        public async Task<IEnumerable<StoreDto>> GetByCompany (string companyName)
         {
              try
             {
                 var result = await _storeRepository.FindListByCondition(x => x.Company.Name == companyName);
-                return result;
+                var storeMapper = _mapper.Map<IEnumerable<StoreDto>>(result);
+                return storeMapper;
             }
             catch (Exception)
             {
@@ -77,17 +84,13 @@ namespace KanbanModule.Services
         {
             try
             {
-                var store = new Store()
-                {
-                    Name = request.Name,
-                    Description = request.Description,
-                    Company = await _companyRepository.Get(_currentUser.CompanyId),
-                    Active = true,
-                    CreatedBy = await _userRepository.Get(_currentUser.UserId),
-                    CreatedOn = DateTime.Now,
-                };
-                await _storeRepository.Insert(store);
-                return store.StoreId;
+                var storeMapper = _mapper.Map<Store>(request);
+
+                storeMapper.Company = await _companyRepository.Get(_currentUser.CompanyId);
+                storeMapper.CreatedBy = await _userRepository.Get(_currentUser.UserId);
+
+                await _storeRepository.Insert(storeMapper);
+                return storeMapper.StoreId;
             }
             catch (Exception)
             {

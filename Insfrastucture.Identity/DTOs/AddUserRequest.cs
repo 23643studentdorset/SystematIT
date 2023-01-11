@@ -1,36 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Infrastucture.Identity.Validators;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Infrastucture.Identity.DTOs
 {
     public class AddUserRequest
     {
-        [Required]
-        [MaxLength(50)]
+        [Required(ErrorMessage = "Name is Required")]
+        [StringLength(50, MinimumLength = 2)]
         public string FirstName { get; set; }
 
-        [MaxLength(50)]
+        [Required(ErrorMessage = "Surname is Required")]
+        [StringLength(50, MinimumLength = 2)]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Email is Required")]
+        [DataType(DataType.EmailAddress)]
         [MaxLength(50)]
+        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Incorrect Email Format")]
         public string Email { get; set; }
 
+        [Required]
         [MaxLength(50)]
         public string Mobile { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Address { get; set; }
 
+        [Required]
         [MaxLength(50)]
         public string Company { get; set; }
-        
-        [MaxLength(50)]
+
+        [Required]
+        [DateOfBirthValidator]
         public string Dob { get; set; }
 
+        [DataType(DataType.Password)]
         [MaxLength(50)]
         public string Password { get; set; }
 

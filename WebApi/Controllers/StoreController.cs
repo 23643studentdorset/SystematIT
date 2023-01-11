@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _storeService.Get();
+                var result = await _storeService.GetAll();
                 return Ok (result);
             }
             catch (Exception exception)

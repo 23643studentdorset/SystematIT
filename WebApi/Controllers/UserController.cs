@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _userService.Get();
+                var result = await _userService.GetAll();
                 return Ok(result);
             }
             catch (Exception exception)
@@ -51,25 +51,6 @@ namespace WebApi.Controllers
             catch (Exception exception)
             {
                 _logger.LogError("Unexpected exception on Get user by id ", exception);
-                return BadRequest(exception.Message);
-            }
-        }
-
-        [HttpGet("name")]
-        [ValidateModel]
-        [Authorize]
-        public async Task<IActionResult> GetByName(string firstName, string lastName)
-        {
-            try
-            {
-                var result = await _userService.GetByName(firstName, lastName);
-                if (result == null)
-                    return StatusCode(StatusCodes.Status204NoContent, $"No user found with name: {firstName} {lastName}");
-                return Ok(result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Unexpected exception on Get user by name ", exception);
                 return BadRequest(exception.Message);
             }
         }

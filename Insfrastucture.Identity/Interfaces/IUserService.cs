@@ -10,11 +10,10 @@ namespace Infrastucture.Identity.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> Get();
-        Task<User> GetById(int id);
-        Task<User> GetByName(string firstName, string lastName);
-        Task<User> GetByEmail(string email);
-        Task<IEnumerable<User>> GetByCompany(string company);
+        Task<IEnumerable<UserDto>> GetAll();
+        Task<UserDto> GetById(int id);
+        Task<UserDto> GetByEmail(string email);
+        Task<IEnumerable<UserDto>> GetByCompany(string company);
         Task<int> AddUserRequest(AddUserRequest user);
         Task<bool> UpdateUserRequest(UpdateUserRequest user);
         Task<bool> DeleteUser(int id);
