@@ -30,5 +30,7 @@
 
         public List<TaskHistory> Histories { get; set; }
 
+        public List<Comment> Comment { get; set; }
+
     }
 }

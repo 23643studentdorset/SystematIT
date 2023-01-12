@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastucture.DataAccess.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -283,6 +283,26 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    CommentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    KanbanTaskId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.CommentId);
+                    table.ForeignKey(
+                        name: "FK_Comment_KanbanTasks_KanbanTaskId",
+                        column: x => x.KanbanTaskId,
+                        principalTable: "KanbanTasks",
+                        principalColumn: "KanbanTaskId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskHistories",
                 columns: table => new
                 {
@@ -316,8 +336,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -333,26 +353,26 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "YehqQuwAHCOx+W/qpLFG9dFycG2gypUM3JmQe6IYx8w=", "dgeDUCX4AKiH6XJgHJB/bA==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "n7jqwVo+Q2FoK0zUa+PWvtHFekenJBVuMeX5HVgoaJk=", "b6cpRECzXMLbtziX80Mc5w==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "Bqk0vGedREzrSDD0cWxVT280BoTAp++L3E6/2g0dsZU=", "4zTHMdBsa6S9AxPNWnD9UQ==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "LuqNqXFQJ3BB4uOamd9Rv5HjVe5gQpP5kgz4MNk53eY=", "1YBrM9bbc0pCMJGSh1IG+g==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -364,6 +384,11 @@ namespace Infrastucture.DataAccess.Migrations
                     { 3, 1 },
                     { 3, 2 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_KanbanTaskId",
+                table: "Comment",
+                column: "KanbanTaskId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_CreatedByUserId",
@@ -468,6 +493,9 @@ namespace Infrastucture.DataAccess.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Comment");
+
             migrationBuilder.DropTable(
                 name: "Messages");
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DataModel;
-using DataModel.Enums;
 using Infrastucture.DataAccess.Interfaces;
 using Infrastucture.Helpers;
 using Infrastucture.Identity.DTOs;
@@ -14,13 +13,15 @@ namespace Infrastucture.Identity.Services
         private readonly ICurrentUser _currentUser;
         private readonly IMapper _mapper;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserService(IUserRepository userRepository, ICurrentUser currentUser, ICompanyRepository companyRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, ICurrentUser currentUser, ICompanyRepository companyRepository, IMapper mapper, IRoleRepository userRoleRepository)
         { 
             _userRepository = userRepository;
             _companyRepository = companyRepository;
             _currentUser = currentUser;
             _mapper = mapper;
+            _roleRepository = userRoleRepository;
         }
 
         public async Task<int> AddUserRequest(AddUserRequest request)
@@ -38,12 +39,14 @@ namespace Infrastucture.Identity.Services
 
                 var hashedPassword = PasswordEncryption.SaltAndHashPassword(request.Password);
 
+                var role = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleRegular);
+
                 var userMapper = _mapper.Map<User>(request);
 
                 userMapper.Password = hashedPassword.Item1;
                 userMapper.Salt = hashedPassword.Item2;
                 userMapper.Company = company;
-                userMapper.UserRoles = new List<UserRole>() { new UserRole() { RoleId = (int)RoleKeys.Regular, User = userMapper } };
+                userMapper.UserRoles = new List<UserRole>() { new UserRole() { Role = role, User = userMapper } };
 
                 await _userRepository.Insert(userMapper);
                 return userMapper.UserId;

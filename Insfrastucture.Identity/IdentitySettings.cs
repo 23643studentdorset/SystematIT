@@ -11,5 +11,7 @@ namespace Infrastucture.Identity
         public static readonly string ClaimEmail = "Email";
         public static readonly string ClaimUserId = "UserId";
         public static readonly string ClaimCompanyId = "CompanyId";
+
+        public static readonly string RoleRegular = "Regular";
     }
 }

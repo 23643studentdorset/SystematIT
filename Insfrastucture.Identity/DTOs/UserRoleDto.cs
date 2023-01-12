@@ -1,5 +1,4 @@
-﻿using DataModel.Enums;
-
+﻿
 namespace Infrastucture.Identity.DTOs
 {
     public class UserRoleDto
@@ -8,6 +7,6 @@ namespace Infrastucture.Identity.DTOs
 
         public int RoleId { get; set; }
 
-        public RoleKeys RoleName { get; set; }
+        public string RoleName { get; set; }
     }
 }

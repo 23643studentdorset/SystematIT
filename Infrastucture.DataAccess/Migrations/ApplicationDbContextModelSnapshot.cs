@@ -22,6 +22,28 @@ namespace Infrastucture.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DataModel.Comment", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KanbanTaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("KanbanTaskId");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("DataModel.Company", b =>
                 {
                     b.Property<int>("CompanyId")
@@ -60,7 +82,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -69,7 +91,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -121,7 +143,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -130,7 +152,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -365,7 +387,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -463,8 +485,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "YehqQuwAHCOx+W/qpLFG9dFycG2gypUM3JmQe6IYx8w=",
-                            Salt = "dgeDUCX4AKiH6XJgHJB/bA=="
+                            Password = "n7jqwVo+Q2FoK0zUa+PWvtHFekenJBVuMeX5HVgoaJk=",
+                            Salt = "b6cpRECzXMLbtziX80Mc5w=="
                         },
                         new
                         {
@@ -476,8 +498,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Charlie",
                             LastName = "Shein",
                             Mobile = "0878352233",
-                            Password = "Bqk0vGedREzrSDD0cWxVT280BoTAp++L3E6/2g0dsZU=",
-                            Salt = "4zTHMdBsa6S9AxPNWnD9UQ=="
+                            Password = "LuqNqXFQJ3BB4uOamd9Rv5HjVe5gQpP5kgz4MNk53eY=",
+                            Salt = "1YBrM9bbc0pCMJGSh1IG+g=="
                         });
                 });
 
@@ -516,6 +538,17 @@ namespace Infrastucture.DataAccess.Migrations
                             RoleId = 3,
                             UserId = 2
                         });
+                });
+
+            modelBuilder.Entity("DataModel.Comment", b =>
+                {
+                    b.HasOne("DataModel.KanbanTask", "KanbanTask")
+                        .WithMany("Comment")
+                        .HasForeignKey("KanbanTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KanbanTask");
                 });
 
             modelBuilder.Entity("DataModel.Department", b =>
@@ -714,6 +747,8 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>
                 {
+                    b.Navigation("Comment");
+
                     b.Navigation("Histories");
                 });
 

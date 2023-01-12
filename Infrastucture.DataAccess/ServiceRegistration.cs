@@ -16,6 +16,7 @@ namespace Infrastucture.DataAccess
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
     }
 }
