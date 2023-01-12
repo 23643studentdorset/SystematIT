@@ -23,8 +23,5 @@ namespace Infrastucture.Identity.DTOs
 
         [MaxLength(50)]
         public string Address { get; set; }
-
-        [MaxLength(50)]
-        public string Dob { get; set; }
     }
 }

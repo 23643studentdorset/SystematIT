@@ -150,8 +150,7 @@ namespace Infrastucture.Identity.Services
                 UserToUpdate.LastName = request.LastName;
                 UserToUpdate.Mobile = request.Mobile;
                 UserToUpdate.Address = request.Address;
-                UserToUpdate.DOB = DateTime.Parse(request.Dob);
-
+                
                 await _userRepository.Update(UserToUpdate);
                 return true;
             }

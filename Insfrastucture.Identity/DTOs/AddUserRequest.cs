@@ -33,7 +33,7 @@ namespace Infrastucture.Identity.DTOs
 
         [Required]
         [DateOfBirthValidator]
-        public string Dob { get; set; }
+        public DateTime Dob { get; set; }
 
         [DataType(DataType.Password)]
         [MaxLength(50)]
