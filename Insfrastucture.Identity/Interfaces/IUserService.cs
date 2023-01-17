@@ -13,7 +13,7 @@ namespace Infrastucture.Identity.Interfaces
         Task<IEnumerable<UserDto>> GetAll();
         Task<UserDto> GetById(int id);
         Task<UserDto> GetByEmail(string email);
-        Task<IEnumerable<UserDto>> GetByCompany(string company);
+        Task<IEnumerable<UserDto>> GetByCompany(int companyId);
         Task<int> AddUserRequest(AddUserRequest user);
         Task<bool> UpdateUserRequest(UpdateUserRequest user);
         Task<bool> DeleteUser(int id);

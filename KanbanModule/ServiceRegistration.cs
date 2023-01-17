@@ -11,6 +11,9 @@ namespace KanbanModule
         {
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IKanbanTaskService, KanbanTaskService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<ITaskCommentService, TaskCommentService>();
         }
     }
 }

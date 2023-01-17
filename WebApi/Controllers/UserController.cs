@@ -77,13 +77,13 @@ namespace WebApi.Controllers
         [HttpGet("company")]
         [ValidateModel]
         [Authorize]
-        public async Task<IActionResult> GetByCompany(string company)
+        public async Task<IActionResult> GetByCompany(int companyId)
         {
             try
             {
-                var result = await _userService.GetByCompany(company);
+                var result = await _userService.GetByCompany(companyId);
                 if (result == null)
-                    return StatusCode(StatusCodes.Status204NoContent, $"No user found for company: {company}");
+                    return StatusCode(StatusCodes.Status204NoContent, $"No user found for company: {companyId}");
                 return Ok(result);
             }
             catch (Exception exception)

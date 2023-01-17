@@ -16,7 +16,7 @@ namespace Infrastucture.DataAccess.Repositories
             _entities = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             return await _entities.ToListAsync();
         }

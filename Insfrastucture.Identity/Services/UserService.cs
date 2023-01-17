@@ -95,11 +95,11 @@ namespace Infrastucture.Identity.Services
             }
         }
 
-        public async Task<IEnumerable<UserDto>> GetByCompany(string company)
+        public async Task<IEnumerable<UserDto>> GetByCompany(int companyId)
         {
             try
             {
-                var result = await _userRepository.FindListByCondition(x => x.Company.Name == company);
+                var result = await _userRepository.FindListByCondition(x => x.CompanyId == companyId);
                 var userMapper = _mapper.Map<IEnumerable<UserDto>>(result);
                 return userMapper;
             }

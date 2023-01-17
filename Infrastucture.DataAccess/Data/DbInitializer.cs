@@ -74,6 +74,24 @@ namespace Infrastucture.DataAccess.Data
                    .WithMany()
                    .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_KanbanTask_Company_CompanyId");
+                
+                entity.HasMany(e => e.Histories)
+                   .WithOne()
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasConstraintName("FK_KanbanTask_Histories_TaskHistoryId");
+            });
+
+            modelBuilder.Entity<TaskHistory>(entity =>
+            {
+                entity.HasKey(e => e.TaskHistoryId);
+                
+                entity.Property(e => e.TaskHistoryId).UseIdentityColumn(1, 1);
+
+                entity.HasOne(e => e.KanbanTask)
+                    .WithMany(e => e.Histories)
+                    .HasForeignKey(e => e.KanbanTaskId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
             });
 
             modelBuilder.Entity<Store>(entity =>
@@ -120,14 +138,6 @@ namespace Infrastucture.DataAccess.Data
 
             });
 
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.HasQueryFilter(p => p.Active);
-
-                entity.Navigation(e => e.CreatedBy).AutoInclude();
-
-                entity.Navigation(e => e.ModifiedBy).AutoInclude();
-            });
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -222,6 +232,15 @@ namespace Infrastucture.DataAccess.Data
                 }
             };
 
+            var statuses = new List<Status>()
+            {
+                new Status {StatusId = 1, Name = "ToDo"},
+                new Status {StatusId = 2, Name = "InProgress"},
+                new Status {StatusId = 3, Name = "Done"},
+                new Status {StatusId = 4, Name = "Cancelled"},
+                new Status {StatusId = 5, Name = "Blocked"},
+            };
+
             var users = new List<User>() { firstUser, secondUser };
 
             modelBuilder.Entity<Company>().HasData(companies);
@@ -229,6 +248,8 @@ namespace Infrastucture.DataAccess.Data
             modelBuilder.Entity<Role>().HasData(roles);
 
             modelBuilder.Entity<User>().HasData(users);
+
+            modelBuilder.Entity<Status>().HasData(statuses);
 
             modelBuilder.Entity<Store>()
               .HasData(

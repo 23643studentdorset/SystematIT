@@ -17,7 +17,7 @@ namespace Infrastucture.Identity.DTOs
         [Required(ErrorMessage = "Email is Required")]
         [DataType(DataType.EmailAddress)]
         [MaxLength(50)]
-        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Incorrect Email Format")]
+        [RegularExpression(@"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Incorrect Email Format")]
         public string Email { get; set; }
 
         [Required]
@@ -32,8 +32,8 @@ namespace Infrastucture.Identity.DTOs
         public string Company { get; set; }
 
         [Required]
-        [DateOfBirthValidator]
-        public DateTime Dob { get; set; }
+        [DateOfBirthValidator]       
+        public string Dob { get; set; }
 
         [DataType(DataType.Password)]
         [MaxLength(50)]

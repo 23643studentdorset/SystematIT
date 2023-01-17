@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastucture.DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class SystematIt : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,6 +39,19 @@ namespace Infrastucture.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.RoleId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Statuses",
+                columns: table => new
+                {
+                    StatusId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statuses", x => x.StatusId);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,36 +147,6 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Statuses",
-                columns: table => new
-                {
-                    StatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedByUserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Statuses", x => x.StatusId);
-                    table.ForeignKey(
-                        name: "FK_Statuses_Users_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Statuses_Users_ModifiedByUserId",
-                        column: x => x.ModifiedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
                 {
@@ -240,7 +223,7 @@ namespace Infrastucture.DataAccess.Migrations
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -280,6 +263,11 @@ namespace Infrastucture.DataAccess.Migrations
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "StoreId");
+                    table.ForeignKey(
+                        name: "FK_KanbanTasks_Users_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -308,27 +296,69 @@ namespace Infrastucture.DataAccess.Migrations
                 {
                     TaskHistoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskKanbanTaskId = table.Column<int>(type: "int", nullable: false),
-                    HistoryFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HistoryTo = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedByUserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    KanbanTaskId = table.Column<int>(type: "int", nullable: false),
+                    VersionId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaskStatusStatusId = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    StoreId = table.Column<int>(type: "int", nullable: true),
+                    ReporterUserId = table.Column<int>(type: "int", nullable: false),
+                    AssigneeUserId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TaskHistories", x => x.TaskHistoryId);
                     table.ForeignKey(
-                        name: "FK_TaskHistories_KanbanTasks_TaskKanbanTaskId",
-                        column: x => x.TaskKanbanTaskId,
-                        principalTable: "KanbanTasks",
-                        principalColumn: "KanbanTaskId",
+                        name: "FK_TaskHistories_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TaskHistories_Users_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
+                        name: "FK_TaskHistories_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Statuses_TaskStatusStatusId",
+                        column: x => x.TaskStatusStatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Stores_StoreId",
+                        column: x => x.StoreId,
+                        principalTable: "Stores",
+                        principalColumn: "StoreId");
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Users_AssigneeUserId",
+                        column: x => x.AssigneeUserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Users_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Users_ReporterUserId",
+                        column: x => x.ReporterUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskHistory_KanbanTask_KanbanTaskId",
+                        column: x => x.KanbanTaskId,
+                        principalTable: "KanbanTasks",
+                        principalColumn: "KanbanTaskId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -336,8 +366,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -351,28 +381,40 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "n7jqwVo+Q2FoK0zUa+PWvtHFekenJBVuMeX5HVgoaJk=", "b6cpRECzXMLbtziX80Mc5w==" });
+                table: "Statuses",
+                columns: new[] { "StatusId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "ToDo" },
+                    { 2, "InProgress" },
+                    { 3, "Done" },
+                    { 4, "Cancelled" },
+                    { 5, "Blocked" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "LuqNqXFQJ3BB4uOamd9Rv5HjVe5gQpP5kgz4MNk53eY=", "1YBrM9bbc0pCMJGSh1IG+g==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "l+6YdJodrpQx66c2hwX7MQOsN3qZOrCXCsP4hXXyah4=", "0sH2S9l70GycnRQ8rIDGog==" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "hSP/jswz9EBSb4LnOmFZiBRNxdzN6q/mMSA/xngH2Ms=", "dFdLWWdupyTiCUMvWC/pYQ==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 12, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -416,6 +458,11 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_KanbanTasks_ModifiedByUserId",
+                table: "KanbanTasks",
+                column: "ModifiedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KanbanTasks_ReporterUserId",
                 table: "KanbanTasks",
                 column: "ReporterUserId");
@@ -446,16 +493,6 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "SenderUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Statuses_CreatedByUserId",
-                table: "Statuses",
-                column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Statuses_ModifiedByUserId",
-                table: "Statuses",
-                column: "ModifiedByUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Stores_CompanyId",
                 table: "Stores",
                 column: "CompanyId");
@@ -471,14 +508,44 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaskHistories_CreatedByUserId",
+                name: "IX_TaskHistories_AssigneeUserId",
                 table: "TaskHistories",
-                column: "CreatedByUserId");
+                column: "AssigneeUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaskHistories_TaskKanbanTaskId",
+                name: "IX_TaskHistories_CompanyId",
                 table: "TaskHistories",
-                column: "TaskKanbanTaskId");
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_DepartmentId",
+                table: "TaskHistories",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_KanbanTaskId",
+                table: "TaskHistories",
+                column: "KanbanTaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_ModifiedByUserId",
+                table: "TaskHistories",
+                column: "ModifiedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_ReporterUserId",
+                table: "TaskHistories",
+                column: "ReporterUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_StoreId",
+                table: "TaskHistories",
+                column: "StoreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_TaskStatusStatusId",
+                table: "TaskHistories",
+                column: "TaskStatusStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_UserId",

@@ -26,7 +26,7 @@
 
         public string Description { get; set; }
 
-        public string? Notes { get; set; }
+        public User? ModifiedBy { get; set; }
 
         public List<TaskHistory> Histories { get; set; }
 
