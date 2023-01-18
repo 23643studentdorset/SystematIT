@@ -10,6 +10,43 @@ namespace Infrastucture.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Boards",
+                columns: table => new
+                {
+                    BoardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Boards", x => x.BoardId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CardColumns",
+                columns: table => new
+                {
+                    ColumnId = table.Column<int>(type: "int", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardColumns", x => new { x.ColumnId, x.CardId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CardTags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardTags", x => new { x.TagId, x.CardId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
@@ -55,6 +92,25 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Columns",
+                columns: table => new
+                {
+                    ColumnId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Columns", x => x.ColumnId);
+                    table.ForeignKey(
+                        name: "FK_Columns_Boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "Boards",
+                        principalColumn: "BoardId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -79,6 +135,43 @@ namespace Infrastucture.DataAccess.Migrations
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cards",
+                columns: table => new
+                {
+                    CardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<int>(type: "int", nullable: false),
+                    AssigneeId = table.Column<int>(type: "int", nullable: false),
+                    ColumnId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cards", x => x.CardId);
+                    table.ForeignKey(
+                        name: "FK_Card_AssigneeId_UserId",
+                        column: x => x.AssigneeId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Card_CreatedByUserId_UserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Cards_Columns_ColumnId",
+                        column: x => x.ColumnId,
+                        principalTable: "Columns",
+                        principalColumn: "ColumnId");
                 });
 
             migrationBuilder.CreateTable(
@@ -208,6 +301,26 @@ namespace Infrastucture.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.TagId);
+                    table.ForeignKey(
+                        name: "FK_Tags_Cards_CardId",
+                        column: x => x.CardId,
+                        principalTable: "Cards",
+                        principalColumn: "CardId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KanbanTasks",
                 columns: table => new
                 {
@@ -304,7 +417,7 @@ namespace Infrastucture.DataAccess.Migrations
                     CompanyId = table.Column<int>(type: "int", nullable: false),
                     StoreId = table.Column<int>(type: "int", nullable: true),
                     ReporterUserId = table.Column<int>(type: "int", nullable: false),
-                    AssigneeUserId = table.Column<int>(type: "int", nullable: false),
+                    AssigneeId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -313,6 +426,12 @@ namespace Infrastucture.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TaskHistories", x => x.TaskHistoryId);
+                    table.ForeignKey(
+                        name: "FK_TaskHistories_Assignee_AssigneeId",
+                        column: x => x.AssigneeId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TaskHistories_Companies_CompanyId",
                         column: x => x.CompanyId,
@@ -326,6 +445,12 @@ namespace Infrastucture.DataAccess.Migrations
                         principalColumn: "DepartmentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_TaskHistories_Reporter_ReporterId",
+                        column: x => x.ReporterUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_TaskHistories_Statuses_TaskStatusStatusId",
                         column: x => x.TaskStatusStatusId,
                         principalTable: "Statuses",
@@ -337,22 +462,10 @@ namespace Infrastucture.DataAccess.Migrations
                         principalTable: "Stores",
                         principalColumn: "StoreId");
                     table.ForeignKey(
-                        name: "FK_TaskHistories_Users_AssigneeUserId",
-                        column: x => x.AssigneeUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_TaskHistories_Users_ModifiedByUserId",
                         column: x => x.ModifiedByUserId,
                         principalTable: "Users",
                         principalColumn: "UserId");
-                    table.ForeignKey(
-                        name: "FK_TaskHistories_Users_ReporterUserId",
-                        column: x => x.ReporterUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TaskHistory_KanbanTask_KanbanTaskId",
                         column: x => x.KanbanTaskId,
@@ -366,8 +479,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -395,26 +508,26 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "l+6YdJodrpQx66c2hwX7MQOsN3qZOrCXCsP4hXXyah4=", "0sH2S9l70GycnRQ8rIDGog==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "LY98zI5/fyyW1OoVPkvYz5BPVr3LxJgotuFPHzk5xWs=", "f0LCNLYl6lQ3Th7Nvpt9yg==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "hSP/jswz9EBSb4LnOmFZiBRNxdzN6q/mMSA/xngH2Ms=", "dFdLWWdupyTiCUMvWC/pYQ==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlieshein@buttlers.com", "Charlie", "Shein", "0878352233", "0UTzB5QOtpPTCq52a7fVJyTMeuAtSlFC9CD6W6pAGtY=", "trWZ2mmFe1GwzW9ldnnD7g==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -426,6 +539,28 @@ namespace Infrastucture.DataAccess.Migrations
                     { 3, 1 },
                     { 3, 2 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_AssigneeId",
+                table: "Cards",
+                column: "AssigneeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_ColumnId",
+                table: "Cards",
+                column: "ColumnId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_CreatedByUserId",
+                table: "Cards",
+                column: "CreatedByUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Columns_BoardId",
+                table: "Columns",
+                column: "BoardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_KanbanTaskId",
@@ -508,9 +643,14 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaskHistories_AssigneeUserId",
+                name: "IX_Tags_CardId",
+                table: "Tags",
+                column: "CardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistories_AssigneeId",
                 table: "TaskHistories",
-                column: "AssigneeUserId");
+                column: "AssigneeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskHistories_CompanyId",
@@ -561,10 +701,19 @@ namespace Infrastucture.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CardColumns");
+
+            migrationBuilder.DropTable(
+                name: "CardTags");
+
+            migrationBuilder.DropTable(
                 name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "TaskHistories");
@@ -573,10 +722,16 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
+                name: "Cards");
+
+            migrationBuilder.DropTable(
                 name: "KanbanTasks");
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Columns");
 
             migrationBuilder.DropTable(
                 name: "Departments");
@@ -586,6 +741,9 @@ namespace Infrastucture.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Stores");
+
+            migrationBuilder.DropTable(
+                name: "Boards");
 
             migrationBuilder.DropTable(
                 name: "Users");

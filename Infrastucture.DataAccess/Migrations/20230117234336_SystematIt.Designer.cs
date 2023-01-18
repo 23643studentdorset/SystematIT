@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230114004337_SystematIt")]
+    [Migration("20230117234336_SystematIt")]
     partial class SystematIt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,118 @@ namespace Infrastucture.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("DataModel.Board", b =>
+                {
+                    b.Property<int>("BoardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoardId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BoardId");
+
+                    b.ToTable("Boards");
+                });
+
+            modelBuilder.Entity("DataModel.Card", b =>
+                {
+                    b.Property<int>("CardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CardId"), 1L, 1);
+
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ColumnId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("CardId");
+
+                    b.HasIndex("AssigneeId")
+                        .IsUnique();
+
+                    b.HasIndex("ColumnId");
+
+                    b.HasIndex("CreatedByUserId")
+                        .IsUnique();
+
+                    b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("DataModel.CardColumn", b =>
+                {
+                    b.Property<int>("ColumnId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ColumnId", "CardId");
+
+                    b.ToTable("CardColumns");
+                });
+
+            modelBuilder.Entity("DataModel.CardTag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TagId", "CardId");
+
+                    b.ToTable("CardTags");
+                });
+
+            modelBuilder.Entity("DataModel.Column", b =>
+                {
+                    b.Property<int>("ColumnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColumnId"), 1L, 1);
+
+                    b.Property<int?>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ColumnId");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("Columns");
+                });
 
             modelBuilder.Entity("DataModel.Comment", b =>
                 {
@@ -84,7 +196,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -93,7 +205,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -145,7 +257,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -154,7 +266,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -395,10 +507,36 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
+                });
+
+            modelBuilder.Entity("DataModel.Tag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"), 1L, 1);
+
+                    b.Property<int?>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagId");
+
+                    b.HasIndex("CardId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("DataModel.TaskHistory", b =>
@@ -409,7 +547,7 @@ namespace Infrastucture.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
 
-                    b.Property<int>("AssigneeUserId")
+                    b.Property<int>("AssigneeId")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyId")
@@ -452,7 +590,7 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasKey("TaskHistoryId");
 
-                    b.HasIndex("AssigneeUserId");
+                    b.HasIndex("AssigneeId");
 
                     b.HasIndex("CompanyId");
 
@@ -530,8 +668,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "l+6YdJodrpQx66c2hwX7MQOsN3qZOrCXCsP4hXXyah4=",
-                            Salt = "0sH2S9l70GycnRQ8rIDGog=="
+                            Password = "LY98zI5/fyyW1OoVPkvYz5BPVr3LxJgotuFPHzk5xWs=",
+                            Salt = "f0LCNLYl6lQ3Th7Nvpt9yg=="
                         },
                         new
                         {
@@ -543,8 +681,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Charlie",
                             LastName = "Shein",
                             Mobile = "0878352233",
-                            Password = "hSP/jswz9EBSb4LnOmFZiBRNxdzN6q/mMSA/xngH2Ms=",
-                            Salt = "dFdLWWdupyTiCUMvWC/pYQ=="
+                            Password = "0UTzB5QOtpPTCq52a7fVJyTMeuAtSlFC9CD6W6pAGtY=",
+                            Salt = "trWZ2mmFe1GwzW9ldnnD7g=="
                         });
                 });
 
@@ -583,6 +721,38 @@ namespace Infrastucture.DataAccess.Migrations
                             RoleId = 3,
                             UserId = 2
                         });
+                });
+
+            modelBuilder.Entity("DataModel.Card", b =>
+                {
+                    b.HasOne("DataModel.User", "Assignee")
+                        .WithOne()
+                        .HasForeignKey("DataModel.Card", "AssigneeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Card_AssigneeId_UserId");
+
+                    b.HasOne("DataModel.Column", null)
+                        .WithMany("Cards")
+                        .HasForeignKey("ColumnId");
+
+                    b.HasOne("DataModel.User", "CreatedByUser")
+                        .WithOne()
+                        .HasForeignKey("DataModel.Card", "CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Card_CreatedByUserId_UserId");
+
+                    b.Navigation("Assignee");
+
+                    b.Navigation("CreatedByUser");
+                });
+
+            modelBuilder.Entity("DataModel.Column", b =>
+                {
+                    b.HasOne("DataModel.Board", null)
+                        .WithMany("Columns")
+                        .HasForeignKey("BoardId");
                 });
 
             modelBuilder.Entity("DataModel.Comment", b =>
@@ -729,13 +899,21 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("ModifiedBy");
                 });
 
+            modelBuilder.Entity("DataModel.Tag", b =>
+                {
+                    b.HasOne("DataModel.Card", null)
+                        .WithMany("Tag")
+                        .HasForeignKey("CardId");
+                });
+
             modelBuilder.Entity("DataModel.TaskHistory", b =>
                 {
                     b.HasOne("DataModel.User", "Assignee")
                         .WithMany()
-                        .HasForeignKey("AssigneeUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TaskHistories_Assignee_AssigneeId");
 
                     b.HasOne("DataModel.Company", "Company")
                         .WithMany()
@@ -763,8 +941,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.User", "Reporter")
                         .WithMany()
                         .HasForeignKey("ReporterUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TaskHistories_Reporter_ReporterId");
 
                     b.HasOne("DataModel.Store", "Store")
                         .WithMany()
@@ -822,6 +1001,21 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DataModel.Board", b =>
+                {
+                    b.Navigation("Columns");
+                });
+
+            modelBuilder.Entity("DataModel.Card", b =>
+                {
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("DataModel.Column", b =>
+                {
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>

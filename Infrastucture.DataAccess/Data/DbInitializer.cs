@@ -74,7 +74,7 @@ namespace Infrastucture.DataAccess.Data
                    .WithMany()
                    .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_KanbanTask_Company_CompanyId");
-                
+
                 entity.HasMany(e => e.Histories)
                    .WithOne()
                    .OnDelete(DeleteBehavior.Restrict)
@@ -84,7 +84,7 @@ namespace Infrastucture.DataAccess.Data
             modelBuilder.Entity<TaskHistory>(entity =>
             {
                 entity.HasKey(e => e.TaskHistoryId);
-                
+
                 entity.Property(e => e.TaskHistoryId).UseIdentityColumn(1, 1);
 
                 entity.HasOne(e => e.KanbanTask)
@@ -92,6 +92,16 @@ namespace Infrastucture.DataAccess.Data
                     .HasForeignKey(e => e.KanbanTaskId)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
+
+                entity.HasOne(e => e.Assignee)
+                      .WithMany()
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("FK_TaskHistories_Assignee_AssigneeId");
+
+                entity.HasOne(e => e.Reporter)
+                      .WithMany()
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("FK_TaskHistories_Reporter_ReporterId");
             });
 
             modelBuilder.Entity<Store>(entity =>
@@ -143,15 +153,15 @@ namespace Infrastucture.DataAccess.Data
             {
                 //entity.Navigation(e => e.Company).AutoInclude();
                 entity.Navigation(e => e.UserRoles).AutoInclude();
-                
+
                 entity.HasOne(e => e.Company)
                    .WithMany()
                    .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_User_Company_CompanyId");
             });
 
-            modelBuilder.Entity<UserRole>(entity => { 
-                entity.HasKey(sc => new {sc.RoleId, sc.UserId});
+            modelBuilder.Entity<UserRole>(entity => {
+                entity.HasKey(sc => new { sc.RoleId, sc.UserId });
                 entity.Navigation(e => e.Role).AutoInclude();
             });
 
