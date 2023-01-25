@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230117234336_SystematIt")]
-    partial class SystematIt
+    [Migration("20230125001532_SystematIT")]
+    partial class SystematIT
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,118 +23,6 @@ namespace Infrastucture.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("DataModel.Board", b =>
-                {
-                    b.Property<int>("BoardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoardId"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BoardId");
-
-                    b.ToTable("Boards");
-                });
-
-            modelBuilder.Entity("DataModel.Card", b =>
-                {
-                    b.Property<int>("CardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CardId"), 1L, 1);
-
-                    b.Property<int>("AssigneeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ColumnId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("CardId");
-
-                    b.HasIndex("AssigneeId")
-                        .IsUnique();
-
-                    b.HasIndex("ColumnId");
-
-                    b.HasIndex("CreatedByUserId")
-                        .IsUnique();
-
-                    b.ToTable("Cards");
-                });
-
-            modelBuilder.Entity("DataModel.CardColumn", b =>
-                {
-                    b.Property<int>("ColumnId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ColumnId", "CardId");
-
-                    b.ToTable("CardColumns");
-                });
-
-            modelBuilder.Entity("DataModel.CardTag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TagId", "CardId");
-
-                    b.ToTable("CardTags");
-                });
-
-            modelBuilder.Entity("DataModel.Column", b =>
-                {
-                    b.Property<int>("ColumnId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColumnId"), 1L, 1);
-
-                    b.Property<int?>("BoardId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ColumnId");
-
-                    b.HasIndex("BoardId");
-
-                    b.ToTable("Columns");
-                });
 
             modelBuilder.Entity("DataModel.Comment", b =>
                 {
@@ -196,7 +84,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -205,7 +93,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -257,7 +145,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -266,7 +154,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -280,14 +168,34 @@ namespace Infrastucture.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KanbanTaskId"), 1L, 1);
 
-                    b.Property<int>("AssigneeUserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentVersionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReporterUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KanbanTaskId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ReporterUserId");
+
+                    b.ToTable("KanbanTasks");
+                });
+
+            modelBuilder.Entity("DataModel.KanbanTaskHistory", b =>
+                {
+                    b.Property<int>("KanbanTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssigneeUserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
@@ -296,14 +204,20 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ModifiedByUserId")
+                    b.Property<int?>("LastModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReporterUserId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
+
+                    b.Property<int>("TaskHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
 
                     b.Property<int>("TaskStatusStatusId")
                         .HasColumnType("int");
@@ -312,26 +226,22 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("VersionId")
+                        .HasColumnType("int");
 
                     b.HasKey("KanbanTaskId");
 
                     b.HasIndex("AssigneeUserId");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("ReporterUserId");
+                    b.HasIndex("LastModifiedByUserId");
 
                     b.HasIndex("StoreId");
 
                     b.HasIndex("TaskStatusStatusId");
 
-                    b.ToTable("KanbanTasks");
+                    b.ToTable("KanbanTaskHistory", (string)null);
                 });
 
             modelBuilder.Entity("DataModel.Message", b =>
@@ -507,106 +417,10 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
-                });
-
-            modelBuilder.Entity("DataModel.Tag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"), 1L, 1);
-
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TagId");
-
-                    b.HasIndex("CardId");
-
-                    b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("DataModel.TaskHistory", b =>
-                {
-                    b.Property<int>("TaskHistoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
-
-                    b.Property<int>("AssigneeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("KanbanTaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReporterUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StoreId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskStatusStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("VersionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TaskHistoryId");
-
-                    b.HasIndex("AssigneeId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("KanbanTaskId");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("ReporterUserId");
-
-                    b.HasIndex("StoreId");
-
-                    b.HasIndex("TaskStatusStatusId");
-
-                    b.ToTable("TaskHistories");
                 });
 
             modelBuilder.Entity("DataModel.User", b =>
@@ -625,6 +439,9 @@ namespace Infrastucture.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -668,8 +485,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "LY98zI5/fyyW1OoVPkvYz5BPVr3LxJgotuFPHzk5xWs=",
-                            Salt = "f0LCNLYl6lQ3Th7Nvpt9yg=="
+                            Password = "EnfWojefRyL8PUgXPoEIHUfmnsN2rw8dVxtEZTEBxPg=",
+                            Salt = "EVQ7wVYT+QgEKxXVahHihQ=="
                         },
                         new
                         {
@@ -677,12 +494,12 @@ namespace Infrastucture.DataAccess.Migrations
                             Address = "28 Test Adress",
                             CompanyId = 1,
                             DOB = new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "charlieshein@buttlers.com",
-                            FirstName = "Charlie",
-                            LastName = "Shein",
+                            Email = "JohnDoe@buttlers.com",
+                            FirstName = "John",
+                            LastName = "Doe",
                             Mobile = "0878352233",
-                            Password = "0UTzB5QOtpPTCq52a7fVJyTMeuAtSlFC9CD6W6pAGtY=",
-                            Salt = "trWZ2mmFe1GwzW9ldnnD7g=="
+                            Password = "5pvGwqy7wY03rC0gf7y75/05XNehwp/5l/T8zEMf7UU=",
+                            Salt = "kVJlpdTAhjJYfy4rKySomA=="
                         });
                 });
 
@@ -723,42 +540,10 @@ namespace Infrastucture.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataModel.Card", b =>
-                {
-                    b.HasOne("DataModel.User", "Assignee")
-                        .WithOne()
-                        .HasForeignKey("DataModel.Card", "AssigneeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Card_AssigneeId_UserId");
-
-                    b.HasOne("DataModel.Column", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("ColumnId");
-
-                    b.HasOne("DataModel.User", "CreatedByUser")
-                        .WithOne()
-                        .HasForeignKey("DataModel.Card", "CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Card_CreatedByUserId_UserId");
-
-                    b.Navigation("Assignee");
-
-                    b.Navigation("CreatedByUser");
-                });
-
-            modelBuilder.Entity("DataModel.Column", b =>
-                {
-                    b.HasOne("DataModel.Board", null)
-                        .WithMany("Columns")
-                        .HasForeignKey("BoardId");
-                });
-
             modelBuilder.Entity("DataModel.Comment", b =>
                 {
                     b.HasOne("DataModel.KanbanTask", "KanbanTask")
-                        .WithMany("Comment")
+                        .WithMany("Comments")
                         .HasForeignKey("KanbanTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -785,30 +570,12 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.KanbanTask", b =>
                 {
-                    b.HasOne("DataModel.User", "Assignee")
-                        .WithMany()
-                        .HasForeignKey("AssigneeUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_KanbanTask_Assignee_UserId");
-
                     b.HasOne("DataModel.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_KanbanTask_Company_CompanyId");
-
-                    b.HasOne("DataModel.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_KanbanTask_Department_DepartmentId");
-
-                    b.HasOne("DataModel.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
 
                     b.HasOne("DataModel.User", "Reporter")
                         .WithMany()
@@ -817,6 +584,37 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_KanbanTask_Reporter_UserId");
 
+                    b.Navigation("Company");
+
+                    b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("DataModel.KanbanTaskHistory", b =>
+                {
+                    b.HasOne("DataModel.User", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TaskHistory_Assignee_UserId");
+
+                    b.HasOne("DataModel.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataModel.KanbanTask", "KanbanTask")
+                        .WithMany("Histories")
+                        .HasForeignKey("KanbanTaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
+
+                    b.HasOne("DataModel.User", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedByUserId");
+
                     b.HasOne("DataModel.Store", "Store")
                         .WithMany()
                         .HasForeignKey("StoreId");
@@ -824,19 +622,16 @@ namespace Infrastucture.DataAccess.Migrations
                     b.HasOne("DataModel.Status", "TaskStatus")
                         .WithMany()
                         .HasForeignKey("TaskStatusStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_KanbanTask_Status_StatusId");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Assignee");
 
-                    b.Navigation("Company");
-
                     b.Navigation("Department");
 
-                    b.Navigation("ModifiedBy");
+                    b.Navigation("KanbanTask");
 
-                    b.Navigation("Reporter");
+                    b.Navigation("LastModifiedBy");
 
                     b.Navigation("Store");
 
@@ -899,79 +694,6 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("ModifiedBy");
                 });
 
-            modelBuilder.Entity("DataModel.Tag", b =>
-                {
-                    b.HasOne("DataModel.Card", null)
-                        .WithMany("Tag")
-                        .HasForeignKey("CardId");
-                });
-
-            modelBuilder.Entity("DataModel.TaskHistory", b =>
-                {
-                    b.HasOne("DataModel.User", "Assignee")
-                        .WithMany()
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TaskHistories_Assignee_AssigneeId");
-
-                    b.HasOne("DataModel.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataModel.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataModel.KanbanTask", "KanbanTask")
-                        .WithMany("Histories")
-                        .HasForeignKey("KanbanTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
-
-                    b.HasOne("DataModel.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
-
-                    b.HasOne("DataModel.User", "Reporter")
-                        .WithMany()
-                        .HasForeignKey("ReporterUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TaskHistories_Reporter_ReporterId");
-
-                    b.HasOne("DataModel.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId");
-
-                    b.HasOne("DataModel.Status", "TaskStatus")
-                        .WithMany()
-                        .HasForeignKey("TaskStatusStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Assignee");
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("KanbanTask");
-
-                    b.Navigation("ModifiedBy");
-
-                    b.Navigation("Reporter");
-
-                    b.Navigation("Store");
-
-                    b.Navigation("TaskStatus");
-                });
-
             modelBuilder.Entity("DataModel.User", b =>
                 {
                     b.HasOne("DataModel.Company", "Company")
@@ -1003,24 +725,9 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DataModel.Board", b =>
-                {
-                    b.Navigation("Columns");
-                });
-
-            modelBuilder.Entity("DataModel.Card", b =>
-                {
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("DataModel.Column", b =>
-                {
-                    b.Navigation("Cards");
-                });
-
             modelBuilder.Entity("DataModel.KanbanTask", b =>
                 {
-                    b.Navigation("Comment");
+                    b.Navigation("Comments");
 
                     b.Navigation("Histories");
                 });

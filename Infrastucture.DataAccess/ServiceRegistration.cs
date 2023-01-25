@@ -18,7 +18,7 @@ namespace Infrastucture.DataAccess
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IKanbanTaskRepository, KanbanTaskRepository>();
-            services.AddScoped<ITaskHistoryRepository, TaskHistoryRepository>();
+            services.AddScoped<IKanbanTaskHistoryRepository, KanbanTaskHistoryRepository>();
             services.AddScoped<IStatusRepository, StatusRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();

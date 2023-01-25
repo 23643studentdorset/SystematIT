@@ -17,7 +17,7 @@ namespace KanbanModule.DTOs
         [Required]
         public int DepartmentId { get; set; }
 
-        public int StoreId { get; set; }
+        public int? StoreId { get; set; }
 
         [Required]
         public int AssigneeId { get; set; }

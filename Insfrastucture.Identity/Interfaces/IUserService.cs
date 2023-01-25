@@ -11,11 +11,19 @@ namespace Infrastucture.Identity.Interfaces
     public interface IUserService
     {
         Task<IEnumerable<UserDto>> GetAll();
+
         Task<UserDto> GetById(int id);
+
+        Task<UserDetailsDto> GetDetailsById(int id);
+
         Task<UserDto> GetByEmail(string email);
-        Task<IEnumerable<UserDto>> GetByCompany(int companyId);
+
+        Task<IEnumerable<UserDto>> GetByCompany();
+
         Task<int> AddUserRequest(AddUserRequest user);
+
         Task<bool> UpdateUserRequest(UpdateUserRequest user);
+
         Task<bool> DeleteUser(int id);
     }
 }

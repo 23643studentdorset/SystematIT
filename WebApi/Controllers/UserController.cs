@@ -19,10 +19,10 @@ namespace WebApi.Controllers
             _userService = userService;
             _logger = logger;
         }
-        
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAll()
+
+        [HttpGet("AllInSystem")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllInSystem()
         {
             try
             {
@@ -74,16 +74,15 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("company")]
-        [ValidateModel]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetByCompany(int companyId)
+        public async Task<IActionResult> GetAllByCompany()
         {
             try
             {
-                var result = await _userService.GetByCompany(companyId);
+                var result = await _userService.GetByCompany();
                 if (result == null)
-                    return StatusCode(StatusCodes.Status204NoContent, $"No user found for company: {companyId}");
+                    return StatusCode(StatusCodes.Status204NoContent, $"No user found for company");
                 return Ok(result);
             }
             catch (Exception exception)

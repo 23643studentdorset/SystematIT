@@ -9,5 +9,6 @@ namespace Infrastucture.DataAccess.Interfaces
 {
     public interface ICommentRepository : IGenericRepository<Comment>
     {
+        Task<Comment> GetWithTaskDetails(int id);
     }
 }

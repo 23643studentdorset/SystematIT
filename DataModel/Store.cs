@@ -20,9 +20,13 @@ namespace DataModel
 
         public bool Active { get; set; }
 
+        public int CreatedByUserId { get; set; }
+
         public User CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public int? ModifiedByUserId { get; set; }
 
         public User? ModifiedBy { get; set; }
 

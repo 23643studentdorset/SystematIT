@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastucture.Identity.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,19 +19,11 @@ namespace KanbanModule.DTOs
 
         public bool Active { get; set; }
 
-        public int CreatedByUserId { get; set; }
-
-        public string CreatedByFirstName { get; set; }
-
-        public string CreatedByLastName { get; set; }
+        public UserDto CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
-        public int? ModifiedByUserId { get; set; }
-
-        public string ModifiedByFirstName { get; set; }
-
-        public string ModifiedByLastName { get; set; }
+        public UserDto? ModifiedBy { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
     }

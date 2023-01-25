@@ -1,10 +1,10 @@
 ﻿
+using AutoMapper;
 using DataModel;
 using Infrastucture.DataAccess.Interfaces;
 using Infrastucture.Identity.Interfaces;
 using KanbanModule.DTOs;
 using KanbanModule.Interfaces;
-
 
 namespace KanbanModule.Services
 {
@@ -16,12 +16,13 @@ namespace KanbanModule.Services
         private readonly IStoreRepository _storeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IDepartmentRepository _departmentRepository;
-        private readonly ITaskHistoryRepository _taskHistoryRepository;
+        private readonly IKanbanTaskHistoryRepository _kanbanTaskHistoryRepository;
+        private readonly IMapper _mapper;
 
-        public KanbanTaskService(ICurrentUser currentUser, IKanbanTaskRepository kanbanTaskRepository, 
+        public KanbanTaskService(ICurrentUser currentUser, IKanbanTaskRepository kanbanTaskRepository,
                                 IStatusRepository statusRepository, IStoreRepository storeRepository,
                                 IUserRepository userRepository, IDepartmentRepository departmentRepository,
-                                ITaskHistoryRepository taskHistoryRepository)
+                                IKanbanTaskHistoryRepository kanbanTaskHistoryRepository, IMapper mapper)
         {
             _currentUser = currentUser;
             _kanbanTaskRepository = kanbanTaskRepository;
@@ -29,7 +30,8 @@ namespace KanbanModule.Services
             _storeRepository = storeRepository;
             _userRepository = userRepository;
             _departmentRepository = departmentRepository;
-            _taskHistoryRepository = taskHistoryRepository;
+            _kanbanTaskHistoryRepository = kanbanTaskHistoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> AddKanbanTask(AddKanbanTaskRequest request)
@@ -37,9 +39,7 @@ namespace KanbanModule.Services
             try
             {
                 var taskStatus = await _statusRepository.FindByCondition(x => x.Name == KanbanModuleSettings.StatusToDo);
-         
-                var reporter = await _userRepository.Get(_currentUser.UserId);
-                
+
                 var assignee = await _userRepository.Get(request.AssigneeId);
                 if (assignee == null || assignee.CompanyId != _currentUser.CompanyId)
                     throw new Exception("Assignee does not exists or does not bellong to your company");
@@ -49,39 +49,30 @@ namespace KanbanModule.Services
                     throw new Exception("Department does not exists");
 
                 Store? store = null;
-                if (request.StoreId != null)
-                    store = await _storeRepository.Get(request.StoreId);
+                if (request.StoreId != null && request.StoreId != 0)
+                    store = await _storeRepository.FindByCondition(x => x.StoreId == request.StoreId.Value && x.CompanyId == _currentUser.CompanyId);
 
                 var kanbanTask = new KanbanTask()
                 {
-                    Title = request.Title,
-                    TaskStatus = taskStatus,
                     CompanyId = _currentUser.CompanyId,
-                    Reporter = reporter,
-                    Assignee = assignee,
-                    Created = DateTime.UtcNow,
-                    Description = request.Description,
-                    Department = department,
-                    Store = store,
-                    Histories = new List<TaskHistory>(),
-                    Comment = null
+                    ReporterUserId = _currentUser.UserId,
+                    CreatedOn = DateTime.UtcNow,
+                    Histories = new List<KanbanTaskHistory>(),
+                    Comments = null,
+                    CurrentVersionId = 1
                 };
 
-                var kanbanTaskHistory = new TaskHistory()
+                var kanbanTaskHistory = new KanbanTaskHistory()
                 {
                     Title = request.Title,
                     TaskStatus = taskStatus,
-                    CompanyId = _currentUser.CompanyId,
-                    Reporter = reporter,
-                    Assignee = assignee,
-                    Created = DateTime.UtcNow,
+                    AssigneeUserId = request.AssigneeId,
                     Description = request.Description,
                     Department = department,
                     Store = store,
                     KanbanTask = kanbanTask,
                     VersionId = 1
                 };
-                // var historyCreateTask = await _taskHistoryRepository.Insert(taskHistory);
 
                 kanbanTask.Histories.Add(kanbanTaskHistory);
 
@@ -95,16 +86,15 @@ namespace KanbanModule.Services
 
         }
 
-        public async Task<IEnumerable<KanbanTask>> GetAllByCompanyId(int CompanyId)
+        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId)
         {
             try
             {
-                if (CompanyId != _currentUser.CompanyId) 
-                    throw new Exception("You don't have access to that Information");
+                var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CurrentVersionId == x.VersionId && x.KanbanTask.CompanyId == _currentUser.CompanyId);
 
-                var result = await _kanbanTaskRepository.FindListByCondition(x => x.CompanyId == CompanyId);
+                var taskMapper = _mapper.Map<IEnumerable<KanbanTaskDetailsDto>>(result);
 
-                return result;
+                return taskMapper;
             }
             catch (Exception)
             {
@@ -112,117 +102,119 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<IEnumerable<KanbanTask>> GetAllByDepartmentId(int departmentId)
+        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId)
         {
             try
-            {                 
-                var department = await _departmentRepository.Get(departmentId);
-                if (department == null) 
-                    throw new Exception("Task for that Department does not exist");
+            {
+                var user = await _userRepository.Get(userId);
+                if (userId != 0 ||  user == null)
+                    throw new Exception("User does not exists");
 
-                var result = await _kanbanTaskRepository.FindListByCondition(x => x.Department.DepartmentId == departmentId);
+                var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CompanyId == _currentUser.CompanyId
+                    && x.KanbanTask.CurrentVersionId == x.VersionId 
+                    && (x.KanbanTask.ReporterUserId == userId || x.AssigneeUserId == userId));
 
-                return result;
+                var taskMapper = _mapper.Map<IEnumerable<KanbanTaskDetailsDto>>(result);
+                return taskMapper;
             }
             catch (Exception)
             {
                 throw;
             }
-            
         }
 
-        public async Task<IEnumerable<KanbanTask>> GetAllByUserId(int userId)
+        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllTasks()
         {
             try
             {
-                int? userIdChecked = null;
-                if (_currentUser.UserId != userId)
-                {
-                    userIdChecked = _currentUser.UserId;
-                }                                                        
-                else
-                {
-                    var userToCheck = _userRepository.FindByCondition(x => x.UserId == userId && x.CompanyId == _currentUser.CompanyId);
-                    if (userToCheck != null)
-                        userIdChecked = userId;
-                }
-                    
-                if (userIdChecked == null)
-                    throw new Exception("User does not exist.");
+                var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CurrentVersionId == x.VersionId && x.KanbanTask.CompanyId == _currentUser.CompanyId);
 
-                var result = await _kanbanTaskRepository.FindListByCondition(x => x.Assignee.UserId == userIdChecked || x.Reporter.UserId == userIdChecked);
-
-                return result;
+                var taskMapper = _mapper.Map<IEnumerable<KanbanTaskDetailsDto>>(result);
+                return taskMapper;
             }
             catch (Exception)
             {
                 throw;
-            }           
+            }
         }
 
-        public async Task<KanbanTask> GetById(int taskId)
+        public async Task<KanbanTaskDto> GetById(int taskId)
         {
             try
             {
                 var result = await _kanbanTaskRepository.Get(taskId);
-                if (result == null || _currentUser.CompanyId != result.CompanyId) 
-                    throw new Exception("Task does not exist on the company");
+                if (result == null || _currentUser.CompanyId != result.CompanyId)
+                    throw new Exception("Task does not exist");
 
-                return result;
+                var taskMapper = _mapper.Map<KanbanTaskDto>(result);
+                return taskMapper;
             }
             catch (Exception)
             {
                 throw;
             }
-           
+        }
+
+        public async Task<KanbanTaskDetailsDto> GetTaskDetailsById(int taskId)
+        {
+            try
+            {
+                var result = await _kanbanTaskRepository.Get(taskId);
+                if (result == null || _currentUser.CompanyId != result.CompanyId)
+                    throw new Exception("Task does not exist");
+
+                var task = await _kanbanTaskHistoryRepository.FindByCondition(x => x.KanbanTaskId == taskId && x.KanbanTask.CurrentVersionId == x.VersionId);
+
+                var taskMapper = _mapper.Map<KanbanTaskDetailsDto>(task);
+                return taskMapper;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> UpdateKanbanTask(UpdateKanbanTask request)
         {
             try
             {
-                var getLastTaskHistory = await _taskHistoryRepository.GetLastHistory(request.KanbanTaskId);                
-                
-                var task = await _kanbanTaskRepository.Get(request.KanbanTaskId);
-                if (task == null || task.CompanyId != _currentUser.CompanyId)
-                    throw new Exception("Task does not exists");
+                var taskDto = await GetById(request.KanbanTaskId);
 
                 var assignee = await _userRepository.Get(request.AssigneeId);
                 if (assignee == null || assignee.CompanyId != _currentUser.CompanyId)
                     throw new Exception("AssigneId User Does not exists on the company");
-                
-                var status = await _statusRepository.FindByCondition(x => x.StatusId == request.StatusId);
+
+                var status = await _statusRepository.Get(request.StatusId);
                 if (status == null)
                     throw new Exception("Status id not exists");
 
                 var department = await _departmentRepository.Get(request.DepartmentId);
                 if (department == null)
-                    throw new Exception("Status id not exists");
-                
-                var store = await _storeRepository.Get(request.StoreId);
-                if (store == null || store.CompanyId != _currentUser.CompanyId)
-                    throw new Exception("AssigneId User Does not exists on the company");
+                    throw new Exception("Department id not exists");
 
-                var kanbanTaskHistory = new TaskHistory()
+                Store? store = null;
+                if (request.StoreId != null && request.StoreId != 0)
+                    store = await _storeRepository.FindByCondition(x => x.StoreId == request.StoreId.Value && x.CompanyId == _currentUser.CompanyId);
+
+                var kanbanTaskhistory = new KanbanTaskHistory()
                 {
                     Title = request.Title,
                     TaskStatus = status,
-                    CompanyId = task.CompanyId,
-                    Reporter = task.Reporter,
-                    Assignee = assignee,
-                    Created = task.Created,
+                    AssigneeUserId = request.AssigneeId,
                     Description = request.Description,
                     Department = department,
                     Store = store,
-                    KanbanTaskId = task.KanbanTaskId,
-                    VersionId = getLastTaskHistory.VersionId + 1,
-                    Updated = DateTime.UtcNow,
-                    ModifiedBy = await _userRepository.Get(_currentUser.UserId)
+                    KanbanTaskId = request.KanbanTaskId,
+                    VersionId = taskDto.CurrentVersionId,
+                    LastModifiedOn = DateTime.UtcNow,
+                    LastModifiedByUserId = _currentUser.UserId
                 };
 
-                _taskHistoryRepository.Insert(kanbanTaskHistory);
-                _kanbanTaskRepository.Update(task);
+                var task = await _kanbanTaskRepository.Get(request.KanbanTaskId);
+                task.CurrentVersionId++;
 
+                await _kanbanTaskHistoryRepository.Insert(kanbanTaskhistory);
+                //await _kanbanTaskRepository.Update(task);
                 return true;
             }
             catch (Exception)
@@ -231,4 +223,6 @@ namespace KanbanModule.Services
             }
         }
     }
+
+       
 }

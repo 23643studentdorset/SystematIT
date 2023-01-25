@@ -10,11 +10,18 @@ namespace KanbanModule.Interfaces
 {
     public interface IKanbanTaskService
     {
-        Task <KanbanTask>GetById(int taskId);
-        Task<IEnumerable<KanbanTask>> GetAllByUserId(int userId);
-        Task<IEnumerable<KanbanTask>> GetAllByCompanyId(int CompanyId);
-        Task<IEnumerable<KanbanTask>> GetAllByDepartmentId(int departmentId);
+        Task<KanbanTaskDto>GetById(int taskId);
+
+        Task<KanbanTaskDetailsDto> GetTaskDetailsById(int taskId);
+
+        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId);
+
+        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllTasks();
+
+        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId);
+
         Task<int> AddKanbanTask(AddKanbanTaskRequest request);
+
         Task<bool> UpdateKanbanTask(UpdateKanbanTask request);
     }
 }

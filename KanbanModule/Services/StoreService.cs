@@ -28,7 +28,7 @@ namespace KanbanModule.Services
         {
             try
             {
-                var result = await _storeRepository.GetAll();
+                var result = await _storeRepository.FindListByCondition(x => x.CompanyId == _currentUser.CompanyId);
                 var storeMapper = _mapper.Map<IEnumerable<StoreDto>>(result);
                 return storeMapper;
             }
@@ -43,8 +43,10 @@ namespace KanbanModule.Services
             try
             {
                 var result = await _storeRepository.Get(id);
-                var storeMapper = _mapper.Map<StoreDto>(result);
-                return storeMapper;
+                if (result != null && result.CompanyId == _currentUser.CompanyId)
+                    return _mapper.Map<StoreDto>(result);
+               
+                return null;
             }
             catch (Exception)
             {
@@ -56,7 +58,7 @@ namespace KanbanModule.Services
         {
             try
             {
-                var result = await _storeRepository.FindByCondition(x => x.Name == name);
+                var result = await _storeRepository.FindByCondition(x => x.Name == name && x.CompanyId == _currentUser.CompanyId);
                 var storeMapper = _mapper.Map<StoreDto>(result);
                 return storeMapper;
             }
@@ -66,28 +68,14 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<IEnumerable<StoreDto>> GetByCompany (string companyName)
-        {
-             try
-            {
-                var result = await _storeRepository.FindListByCondition(x => x.Company.Name == companyName);
-                var storeMapper = _mapper.Map<IEnumerable<StoreDto>>(result);
-                return storeMapper;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-}
-
         public async Task<int> AddStore(AddStoreRequest request)
         {
             try
             {
                 var storeMapper = _mapper.Map<Store>(request);
 
-                storeMapper.Company = await _companyRepository.Get(_currentUser.CompanyId);
-                storeMapper.CreatedBy = await _userRepository.Get(_currentUser.UserId);
+                storeMapper.CompanyId = _currentUser.CompanyId;
+                storeMapper.CreatedByUserId = _currentUser.UserId;
 
                 await _storeRepository.Insert(storeMapper);
                 return storeMapper.StoreId;
@@ -107,8 +95,8 @@ namespace KanbanModule.Services
                 
                 storeToUpdate.Name = request.Name;
                 storeToUpdate.Description = request.Description;
-                storeToUpdate.ModifiedBy = await _userRepository.Get(_currentUser.UserId);
-                storeToUpdate.ModifiedOn = DateTime.Now;
+                storeToUpdate.ModifiedByUserId = _currentUser.UserId;
+                storeToUpdate.ModifiedOn = DateTime.UtcNow;
 
                 await _storeRepository.Update(storeToUpdate);
                 return true;
@@ -125,11 +113,12 @@ namespace KanbanModule.Services
             try
             {
                 var storeToDelete = await _storeRepository.FindByCondition(x => x.StoreId == id && x.CompanyId == _currentUser.CompanyId);
-                if (storeToDelete == null) throw new Exception("Store does not exists in the system.");
+                if (storeToDelete == null) throw 
+                        new Exception("Store does not exists in the system.");
                 
                 storeToDelete.Active = false;
-                storeToDelete.ModifiedBy = await _userRepository.Get(_currentUser.UserId);
-                storeToDelete.ModifiedOn = DateTime.Now;
+                storeToDelete.ModifiedByUserId = _currentUser.UserId;
+                storeToDelete.ModifiedOn = DateTime.UtcNow;
 
                 await _storeRepository.Update(storeToDelete);
                 return true;

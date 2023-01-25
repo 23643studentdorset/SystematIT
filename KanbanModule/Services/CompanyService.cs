@@ -80,7 +80,8 @@ namespace KanbanModule.Services
             try
             {
                 var companyToDelete = await _companyRepository.Get(Id);
-                if (companyToDelete == null) throw new Exception("Company does not exists in the system.");
+                if (companyToDelete == null) 
+                    throw new Exception("Company does not exists in the system.");
                 
                 companyToDelete.Active = false;
                 companyToDelete.DeletedOn = DateTime.Now;

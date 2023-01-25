@@ -75,7 +75,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> PostNewStore(AddCompanyRequest request)
+        public async Task<IActionResult> PostNewCompany(AddCompanyRequest request)
         {
             try
             {

@@ -36,10 +36,10 @@ namespace WebApi.Controllers
                 return BadRequest(exception.Message);
             }
         }
-        
-        
+
+
         [HttpGet("id")]
-        [ValidateModel]       
+        [ValidateModel]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -47,7 +47,7 @@ namespace WebApi.Controllers
                 var result = await _storeService.GetById(id);
                 if (result == null)
                     return StatusCode(StatusCodes.Status204NoContent, $"No Store found with id: {id}");
-                return Ok (result);
+                return Ok(result);
             }
             catch (Exception exception)
             {
@@ -56,9 +56,9 @@ namespace WebApi.Controllers
             }
         }
 
-        
+
         [HttpGet("name")]
-        [ValidateModel]       
+        [ValidateModel]
         public async Task<IActionResult> GetByName(string name)
         {
             try
@@ -66,7 +66,7 @@ namespace WebApi.Controllers
                 var result = await _storeService.GetByName(name);
                 if (result == null)
                     return StatusCode(StatusCodes.Status204NoContent, $"No Store found with name: {name}");
-                return Ok (result);
+                return Ok(result);
             }
             catch (Exception exception)
             {
@@ -75,26 +75,8 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("company")]
-        [ValidateModel]
-        public async Task<IActionResult> GetByCompany(string company)
-        {
-            try
-            {
-                var result = await _storeService.GetByCompany(company);
-                if (result == null)
-                    return StatusCode(StatusCodes.Status204NoContent, $"No Stores found for company: {company}");
-                return Ok(result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Unexpected exception on Get store by company ", exception);
-                return BadRequest(exception.Message);
-            }
-        }
-
-
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateModel]
         public async Task<IActionResult> PostNewStore(AddStoreRequest request)
         {
@@ -112,6 +94,7 @@ namespace WebApi.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "Manager")]
         [ValidateModel]
         public async Task<IActionResult> PutUpdateStore(UpdateStoreRequest request)
         {
@@ -130,6 +113,7 @@ namespace WebApi.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Manager")]
         [ValidateModel]
         public async Task<IActionResult> DeleteStore(int id)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataModel
 {
-    public class TaskHistory
+    public class KanbanTaskHistory
     {
         public int TaskHistoryId { get; set; }
 
@@ -18,27 +18,22 @@ namespace DataModel
 
         public string Title { get; set; }
 
+        public string Description { get; set; }
+
         public Status TaskStatus { get; set; }
 
         public Department Department { get; set; }
 
-        public int CompanyId { get; set; }
-
-        public Company Company { get; set; }
-
         public Store? Store { get; set; }
 
-        public User Reporter { get; set; }
+        public int AssigneeUserId { get; set; }
 
         public User Assignee { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
 
-        public DateTime? Updated { get; set; }
+        public int? LastModifiedByUserId { get; set; }
 
-        public string Description { get; set; }
-
-        public User? ModifiedBy { get; set; }
-
+        public User? LastModifiedBy { get; set; }
     }
 }

@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CalendarModule\CalendarModule.csproj" />
     <ProjectReference Include="..\Infrastucture.DataAccess\Infrastucture.DataAccess.csproj" />
     <ProjectReference Include="..\Insfrastucture.Identity\Infrastucture.Identity.csproj" />
     <ProjectReference Include="..\KanbanModule\KanbanModule.csproj" />

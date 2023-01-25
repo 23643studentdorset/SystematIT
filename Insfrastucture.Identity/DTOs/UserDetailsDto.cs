@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastucture.Identity.DTOs
 {
-    public class UserDto
+    public class UserDetailsDto
     {
         public int UserId { get; set; }
 
@@ -16,5 +16,12 @@ namespace Infrastucture.Identity.DTOs
 
         public string Email { get; set; }
 
+        public string Mobile { get; set; }
+
+        public string Address { get; set; }
+
+        public DateTime DOB { get; set; }
+
+        public IList<UserRoleDto> userRoles { get; set; }
     }
 }

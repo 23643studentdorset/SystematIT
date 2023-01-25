@@ -38,29 +38,45 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("CompanyId")]
+        [HttpGet("taskDetailId")]
         [ValidateModel]
-        public async Task<IActionResult> GetAllByCompanyId(int companyId)
+        public async Task<IActionResult> GetTaskDetails(int taskId)
         {
             try
             {
-                var result = await _kanbanService.GetAllByCompanyId(companyId);
+                var result = await _kanbanService.GetTaskDetailsById(taskId);
                 return Ok(result);
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Unexpected exception on Get all Tasks for company {companyId}", exception);
+                _logger.LogError($"Unexpected exception on Tasks with id:{taskId}", exception);
                 return BadRequest(exception.Message);
             }
         }
 
-        [HttpGet("DepartmentId")]
+        [HttpGet("all")]
+        [ValidateModel]
+        public async Task<IActionResult> GetAllTask()
+        {
+            try
+            {
+                var result = await _kanbanService.GetAllTasks();
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Unexpected exception on Get all Tasks", exception);
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("departmentId")]
         [ValidateModel]
         public async Task<IActionResult> GetAllByDepartmentId(int departmentId)
         {
             try
             {
-                var result = await _kanbanService.GetAllByCompanyId(departmentId);
+                var result = await _kanbanService.GetAllByDepartmentId(departmentId);
                 return Ok(result);
             }
             catch (Exception exception)
@@ -118,9 +134,9 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("TaskIdComment")]
+        [HttpGet("GetAllCommentsByTaskId")]
         [ValidateModel]
-        public async Task<IActionResult> GetAllByTaskId(int taskId)
+        public async Task<IActionResult> GetAllCommentsByTaskId(int taskId)
         {
             try
             {
@@ -135,7 +151,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("Comment")]
+        [HttpPost("CreateComment")]
         [ValidateModel]
         public async Task<IActionResult> CreateComment(AddCommentRequest request)
         {
@@ -151,13 +167,13 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete("CommentId")]
+        [HttpDelete("DeleteComment")]
         [ValidateModel]
-        public async Task<IActionResult> DeleteComment(int taskId, int commentId)
+        public async Task<IActionResult> DeleteComment(int commentId)
         {
             try
             {
-                var result = await _taskCommentService.DeleteComment(taskId, commentId);
+                var result = await _taskCommentService.DeleteComment(commentId);
                 return Ok(result);
             }
             catch (Exception exception)

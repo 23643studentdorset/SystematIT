@@ -23,7 +23,7 @@ namespace Infrastucture.DataAccess
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<TaskHistory> TaskHistories { get; set; }
+        public DbSet<KanbanTaskHistory> TaskHistories { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

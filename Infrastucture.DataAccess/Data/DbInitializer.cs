@@ -24,14 +24,12 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.Receiver).AutoInclude();
 
-                //entity.Navigation(e => e.Company).AutoInclude();
-
-                entity.HasOne(d => d.Sender)
+                entity.HasOne(e => e.Sender)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Message_Sender_UserId");
 
-                entity.HasOne(d => d.Receiver)
+                entity.HasOne(e => e.Receiver)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Message_Receiver_UserId");
@@ -46,62 +44,54 @@ namespace Infrastucture.DataAccess.Data
             {
                 entity.Navigation(e => e.Reporter).AutoInclude();
 
-                entity.Navigation(e => e.Assignee).AutoInclude();
+                entity.Navigation(e => e.Histories).AutoInclude();
 
-                //entity.Navigation(e => e.Company).AutoInclude();
+                entity.Navigation(e => e.Comments).AutoInclude();
 
-                entity.HasOne(d => d.TaskStatus)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_KanbanTask_Status_StatusId");
-
-                entity.HasOne(d => d.Reporter)
+                entity.HasOne(e => e.Reporter)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_KanbanTask_Reporter_UserId");
 
-                entity.HasOne(d => d.Assignee)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_KanbanTask_Assignee_UserId");
-
-                entity.HasOne(d => d.Department)
-                    .WithMany()
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_KanbanTask_Department_DepartmentId");
-
                 entity.HasOne(e => e.Company)
-                   .WithMany()
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_KanbanTask_Company_CompanyId");
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_KanbanTask_Company_CompanyId");
 
                 entity.HasMany(e => e.Histories)
-                   .WithOne()
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_KanbanTask_Histories_TaskHistoryId");
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_KanbanTask_Histories_TaskHistoryId");
             });
 
-            modelBuilder.Entity<TaskHistory>(entity =>
+            modelBuilder.Entity<KanbanTaskHistory>(entity =>
             {
-                entity.HasKey(e => e.TaskHistoryId);
+                entity.ToTable("KanbanTaskHistory");
+
+                entity.HasKey(e => e.KanbanTaskId);
 
                 entity.Property(e => e.TaskHistoryId).UseIdentityColumn(1, 1);
+
+                entity.Navigation(e => e.Assignee).AutoInclude();
+
+                entity.Navigation(e => e.TaskStatus).AutoInclude();
+
+                entity.Navigation(e => e.KanbanTask).AutoInclude();
+
+                entity.Navigation(e => e.Department).AutoInclude();
+
+                entity.Navigation(e => e.Store).AutoInclude();
+
+                entity.HasOne(e => e.Assignee)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_TaskHistory_Assignee_UserId");
 
                 entity.HasOne(e => e.KanbanTask)
                     .WithMany(e => e.Histories)
                     .HasForeignKey(e => e.KanbanTaskId)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
-
-                entity.HasOne(e => e.Assignee)
-                      .WithMany()
-                      .OnDelete(DeleteBehavior.Restrict)
-                      .HasConstraintName("FK_TaskHistories_Assignee_AssigneeId");
-
-                entity.HasOne(e => e.Reporter)
-                      .WithMany()
-                      .OnDelete(DeleteBehavior.Restrict)
-                      .HasConstraintName("FK_TaskHistories_Reporter_ReporterId");
             });
 
             modelBuilder.Entity<Store>(entity =>
@@ -112,9 +102,7 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
 
-                entity.Navigation(e => e.ModifiedBy).AutoInclude();
-
-                //entity.Navigation(e => e.Company).AutoInclude();                   
+                entity.Navigation(e => e.ModifiedBy).AutoInclude();                 
 
                 entity.HasQueryFilter(p => p.Active);
 
@@ -151,7 +139,6 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                //entity.Navigation(e => e.Company).AutoInclude();
                 entity.Navigation(e => e.UserRoles).AutoInclude();
 
                 entity.HasOne(e => e.Company)
@@ -161,7 +148,7 @@ namespace Infrastucture.DataAccess.Data
             });
 
             modelBuilder.Entity<UserRole>(entity => {
-                entity.HasKey(sc => new { sc.RoleId, sc.UserId });
+                entity.HasKey(e => new { e.RoleId, e.UserId });
                 entity.Navigation(e => e.Role).AutoInclude();
             });
 
@@ -207,11 +194,11 @@ namespace Infrastucture.DataAccess.Data
             var secondUser = new User
             {
                 UserId = 2,
-                FirstName = "Charlie",
-                LastName = "Shein",
+                FirstName = "John",
+                LastName = "Doe",
                 Address = "28 Test Adress",
                 DOB = new DateTime(1988, 05, 11),
-                Email = "charlieshein@buttlers.com",
+                Email = "JohnDoe@buttlers.com",
                 Mobile = "0878352233",
                 CompanyId = companies[0].CompanyId,
                 Password = passwordHashedUser2.Item1,
@@ -263,7 +250,7 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<Store>()
               .HasData(
-              new
+              new Store()
               {
                   StoreId = 1,
                   Name = "Ballsbridge",

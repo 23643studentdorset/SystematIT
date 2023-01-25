@@ -63,14 +63,10 @@ namespace Infrastucture.Identity.Services
             {
                 var userToDelete = await _userRepository.Get(id);
                 if (userToDelete == null) throw new Exception("User does not exists in the system.");
-
-                userToDelete.FirstName = "UserDeleted";
-                userToDelete.Email = "UserDeleted";
-                userToDelete.Address = "UserDeleted";
-                userToDelete.DOB = DateTime.Now;
-                userToDelete.Password = "UserDeleted";
+                    
+                userToDelete.DeletedOn = DateTime.UtcNow;
                 userToDelete.Salt = "UserDeleted";
-
+                
                 await _userRepository.Update(userToDelete);
                 return true;
             }
@@ -95,11 +91,11 @@ namespace Infrastucture.Identity.Services
             }
         }
 
-        public async Task<IEnumerable<UserDto>> GetByCompany(int companyId)
+        public async Task<IEnumerable<UserDto>> GetByCompany()
         {
             try
             {
-                var result = await _userRepository.FindListByCondition(x => x.CompanyId == companyId);
+                var result = await _userRepository.FindListByCondition(x => x.CompanyId == _currentUser.CompanyId);
                 var userMapper = _mapper.Map<IEnumerable<UserDto>>(result);
                 return userMapper;
             }
@@ -113,7 +109,7 @@ namespace Infrastucture.Identity.Services
         {
             try
             {
-                var result = await _userRepository.FindByCondition(x => x.Email == email);
+                var result = await _userRepository.FindByCondition(x => x.CompanyId == _currentUser.CompanyId && x.Email == email);
                 if (result == null) throw new Exception("User does not exist in the system.");
                 var userMapper = _mapper.Map<UserDto>(result);
                 return userMapper;
@@ -129,8 +125,29 @@ namespace Infrastucture.Identity.Services
             try
             {
                 var result = await _userRepository.Get(id);
-                if (result == null) throw new Exception("User does not exists in the system.");
+
+                if (result == null || result.CompanyId != _currentUser.CompanyId) 
+                    throw new Exception("User does not exists in the system.");
+
                 var userMapper = _mapper.Map<UserDto>(result);
+                return userMapper;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<UserDetailsDto> GetDetailsById(int id)
+        {
+            try
+            {
+                var result = await _userRepository.Get(id);
+
+                if (result == null || result.CompanyId != _currentUser.CompanyId)
+                    throw new Exception("User does not exists in the system.");
+
+                var userMapper = _mapper.Map<UserDetailsDto>(result);
                 return userMapper;
             }
             catch (Exception)
@@ -143,15 +160,16 @@ namespace Infrastucture.Identity.Services
         {
             try
             {
-                var UserToUpdate = await _userRepository.Get(request.UserId);
-                if (UserToUpdate == null) throw new Exception("User does not exists in the system.");
+                var userToUpdate = await _userRepository.Get(request.UserId);
+                if (userToUpdate == null || userToUpdate.CompanyId != _currentUser.CompanyId)
+                    throw new Exception("User does not exists in the system.");
 
-                UserToUpdate.FirstName = request.FirstName;
-                UserToUpdate.LastName = request.LastName;
-                UserToUpdate.Mobile = request.Mobile;
-                UserToUpdate.Address = request.Address;
+                userToUpdate.FirstName = request.FirstName;
+                userToUpdate.LastName = request.LastName;
+                userToUpdate.Mobile = request.Mobile;
+                userToUpdate.Address = request.Address;
                 
-                await _userRepository.Update(UserToUpdate);
+                await _userRepository.Update(userToUpdate);
                 return true;
             }
             catch (Exception)

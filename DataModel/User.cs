@@ -30,6 +30,8 @@ namespace DataModel
 
         public string Salt { get; set; }
 
+        public DateTime? DeletedOn  { get; set; }
+
         public IList<UserRole> UserRoles { get; set; }
 
     }
