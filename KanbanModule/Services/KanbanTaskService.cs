@@ -107,7 +107,7 @@ namespace KanbanModule.Services
             try
             {
                 var user = await _userRepository.Get(userId);
-                if (userId != 0 ||  user == null)
+                if (userId == 0 ||  user == null)
                     throw new Exception("User does not exists");
 
                 var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CompanyId == _currentUser.CompanyId

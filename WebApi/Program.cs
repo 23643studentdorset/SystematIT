@@ -23,6 +23,8 @@ builder.Services.AddIdentityLayer();
 builder.Services.AddMessageLayer();
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
+
 //builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(opt =>
 {
@@ -93,6 +95,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
