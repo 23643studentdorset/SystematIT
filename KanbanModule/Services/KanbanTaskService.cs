@@ -6,6 +6,13 @@ using Infrastucture.Identity.Interfaces;
 using KanbanModule.DTOs;
 using KanbanModule.Interfaces;
 
+/*
+    Manages all the calls that come from the controllers, add the business layer and interacts with the data access layer of the Kanban board service     
+    call are:
+    1- Add new kanban task into Kanban task repository
+    
+ */
+
 namespace KanbanModule.Services
 {
     public class KanbanTaskService : IKanbanTaskService

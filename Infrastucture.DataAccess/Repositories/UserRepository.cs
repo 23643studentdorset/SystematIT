@@ -4,7 +4,11 @@ using Infrastucture.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Infrastucture.DataAccess.Repositories
-{
+{   /*
+      Manages the access layer for the users, uses cache to keep and intercept the calls and minimize the number of calls the DB.
+      I'm ussing single server cache (there is another inteface to manage more that one server cache)
+     */
+
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private IMemoryCache _cache;
