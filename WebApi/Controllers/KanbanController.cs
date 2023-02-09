@@ -7,7 +7,7 @@ using WebApi.Attributes;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Manager")]
+    [Authorize]
     [Route("api/[controller]")]
     public class KanbanController : ControllerBase
     {
