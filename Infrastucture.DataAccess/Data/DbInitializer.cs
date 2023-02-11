@@ -68,7 +68,7 @@ namespace Infrastucture.DataAccess.Data
             {
                 entity.ToTable("KanbanTaskHistory");
 
-                entity.HasKey(e => e.KanbanTaskId);
+                entity.HasKey(e => e.TaskHistoryId);
 
                 entity.Property(e => e.TaskHistoryId).UseIdentityColumn(1, 1);
 

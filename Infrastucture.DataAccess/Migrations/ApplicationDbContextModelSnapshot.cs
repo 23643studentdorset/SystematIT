@@ -82,7 +82,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -91,7 +91,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -143,7 +143,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -152,7 +152,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -189,8 +189,11 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.KanbanTaskHistory", b =>
                 {
-                    b.Property<int>("KanbanTaskId")
+                    b.Property<int>("TaskHistoryId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
 
                     b.Property<int>("AssigneeUserId")
                         .HasColumnType("int");
@@ -202,6 +205,9 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("KanbanTaskId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("LastModifiedByUserId")
                         .HasColumnType("int");
 
@@ -210,12 +216,6 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
-
-                    b.Property<int>("TaskHistoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskHistoryId"), 1L, 1);
 
                     b.Property<int>("TaskStatusStatusId")
                         .HasColumnType("int");
@@ -227,11 +227,13 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<int>("VersionId")
                         .HasColumnType("int");
 
-                    b.HasKey("KanbanTaskId");
+                    b.HasKey("TaskHistoryId");
 
                     b.HasIndex("AssigneeUserId");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("KanbanTaskId");
 
                     b.HasIndex("LastModifiedByUserId");
 
@@ -415,7 +417,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -483,8 +485,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "EnfWojefRyL8PUgXPoEIHUfmnsN2rw8dVxtEZTEBxPg=",
-                            Salt = "EVQ7wVYT+QgEKxXVahHihQ=="
+                            Password = "Uy94WXmgmVnZhXAciZBf8f6B0VkK7QGOsazAWHpwd9A=",
+                            Salt = "BUPv8vgJar39dPGfq/Sung=="
                         },
                         new
                         {
@@ -496,8 +498,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "John",
                             LastName = "Doe",
                             Mobile = "0878352233",
-                            Password = "5pvGwqy7wY03rC0gf7y75/05XNehwp/5l/T8zEMf7UU=",
-                            Salt = "kVJlpdTAhjJYfy4rKySomA=="
+                            Password = "zhNrO9ygZEpvwG+zOX3HFCfes8ushQRdz/nXu30FAyE=",
+                            Salt = "INtfX7hH5nCF+QmTmB5Qkw=="
                         });
                 });
 

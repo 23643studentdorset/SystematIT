@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastucture.DataAccess.Migrations
 {
-    public partial class SystematIT : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -260,9 +260,9 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "KanbanTaskHistory",
                 columns: table => new
                 {
-                    KanbanTaskId = table.Column<int>(type: "int", nullable: false),
                     TaskHistoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    KanbanTaskId = table.Column<int>(type: "int", nullable: false),
                     VersionId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -275,7 +275,7 @@ namespace Infrastucture.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KanbanTaskHistory", x => x.KanbanTaskId);
+                    table.PrimaryKey("PK_KanbanTaskHistory", x => x.TaskHistoryId);
                     table.ForeignKey(
                         name: "FK_KanbanTaskHistory_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -317,8 +317,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -346,26 +346,26 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "EnfWojefRyL8PUgXPoEIHUfmnsN2rw8dVxtEZTEBxPg=", "EVQ7wVYT+QgEKxXVahHihQ==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "Uy94WXmgmVnZhXAciZBf8f6B0VkK7QGOsazAWHpwd9A=", "BUPv8vgJar39dPGfq/Sung==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "5pvGwqy7wY03rC0gf7y75/05XNehwp/5l/T8zEMf7UU=", "kVJlpdTAhjJYfy4rKySomA==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "zhNrO9ygZEpvwG+zOX3HFCfes8ushQRdz/nXu30FAyE=", "INtfX7hH5nCF+QmTmB5Qkw==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 1, 25, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -402,6 +402,11 @@ namespace Infrastucture.DataAccess.Migrations
                 name: "IX_KanbanTaskHistory_DepartmentId",
                 table: "KanbanTaskHistory",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KanbanTaskHistory_KanbanTaskId",
+                table: "KanbanTaskHistory",
+                column: "KanbanTaskId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KanbanTaskHistory_LastModifiedByUserId",

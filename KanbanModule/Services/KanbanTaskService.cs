@@ -212,7 +212,7 @@ namespace KanbanModule.Services
                     Department = department,
                     Store = store,
                     KanbanTaskId = request.KanbanTaskId,
-                    VersionId = taskDto.CurrentVersionId,
+                    VersionId = taskDto.CurrentVersionId + 1,
                     LastModifiedOn = DateTime.UtcNow,
                     LastModifiedByUserId = _currentUser.UserId
                 };
