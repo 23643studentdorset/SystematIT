@@ -15,5 +15,9 @@ namespace DataModel
         public KanbanTask KanbanTask { get; set; }
 
         public string Description { get; set; }
+
+        public int userId { get; set; }
+
+        public User User { get; set; }
     }
 }

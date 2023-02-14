@@ -12,6 +12,8 @@ namespace KanbanModule.DTOs
 
         public int KanbanTaskId { get; set; }
 
+        public int userId { get; set; }
+
         public string Description { get; set; }
     }
 }

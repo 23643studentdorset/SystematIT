@@ -37,9 +37,14 @@ namespace Infrastucture.DataAccess.Migrations
                     b.Property<int>("KanbanTaskId")
                         .HasColumnType("int");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("CommentId");
 
                     b.HasIndex("KanbanTaskId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Comment");
                 });
@@ -82,7 +87,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -91,7 +96,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -143,7 +148,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -152,7 +157,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -417,7 +422,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -485,8 +490,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "Uy94WXmgmVnZhXAciZBf8f6B0VkK7QGOsazAWHpwd9A=",
-                            Salt = "BUPv8vgJar39dPGfq/Sung=="
+                            Password = "R1TQojs4elWKwW2Yz+A/Tq4Be3ediMnvbzv0AWAbFdE=",
+                            Salt = "KaGRd9q5NOse3RYYDQ9B9Q=="
                         },
                         new
                         {
@@ -498,8 +503,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "John",
                             LastName = "Doe",
                             Mobile = "0878352233",
-                            Password = "zhNrO9ygZEpvwG+zOX3HFCfes8ushQRdz/nXu30FAyE=",
-                            Salt = "INtfX7hH5nCF+QmTmB5Qkw=="
+                            Password = "6wt69Q4jTLmLtBwFh2daFmfKJWSMSsZvpl60f7IqRvs=",
+                            Salt = "VidVen9diodCZTvtv3J4oA=="
                         });
                 });
 
@@ -548,7 +553,15 @@ namespace Infrastucture.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataModel.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("KanbanTask");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataModel.Department", b =>
@@ -739,6 +752,8 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

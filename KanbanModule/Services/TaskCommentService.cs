@@ -27,8 +27,9 @@ namespace KanbanModule.Services
             var kanbanTask = await _kanbanTaskRepository.Get(request.TaskId);
             if (kanbanTask == null || kanbanTask.CompanyId != _currentUser.CompanyId)
                 throw new Exception("Task does not exists in the system");
+            
 
-            var comment = new Comment() { Description = request.Comment, KanbanTask = kanbanTask };
+            var comment = new Comment() { Description = request.Comment, KanbanTask = kanbanTask, userId=_currentUser.UserId };
 
             await _commentRepository.Insert(comment);
             return comment.CommentId;

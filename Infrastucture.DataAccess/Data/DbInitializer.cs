@@ -94,6 +94,11 @@ namespace Infrastucture.DataAccess.Data
                     .HasConstraintName("FK_TaskHistory_KanbanTask_KanbanTaskId");
             });
 
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                //entity.Navigation(e => e.userId).AutoInclude();
+            });
+
             modelBuilder.Entity<Store>(entity =>
             {
                 entity.HasKey(e => e.StoreId);
