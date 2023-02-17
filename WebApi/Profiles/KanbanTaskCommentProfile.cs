@@ -8,7 +8,9 @@ namespace WebApi.Profiles
     {
         public KanbanTaskCommentProfile()
         {
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, CommentDto>()
+
+             .ForMember(dest => dest.user, opt => opt.MapFrom(src => src.User));
         }
     }
 }

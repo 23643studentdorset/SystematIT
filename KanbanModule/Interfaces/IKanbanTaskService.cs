@@ -14,7 +14,7 @@ namespace KanbanModule.Interfaces
 
         Task<KanbanTaskDetailsDto> GetTaskDetailsById(int taskId);
 
-        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId);
+        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId, string status);
 
         Task<IEnumerable<KanbanTaskDetailsDto>> GetAllTasks();
 

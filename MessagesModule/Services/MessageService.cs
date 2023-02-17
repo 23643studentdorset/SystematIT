@@ -55,15 +55,25 @@ namespace MessagesModule.Services
             try
             {
                 var receiver = await _userRepository.Get(request.ReceiverId);
+                var sender = await _userRepository.Get(_currentUser.UserId);
+                var company = await _companyRepository.Get(_currentUser.CompanyId);
+
+                if (receiver == null || receiver.CompanyId != _currentUser.CompanyId) 
+                    throw new Exception("Receiver does not exist in the company");
+                if (sender == null) 
+                    throw new Exception("sender not found");
+                if (company == null) 
+                    throw new Exception("company not found");
+
                 var message = new Message()
                 {
                     Content = request.Content,
-                    Sender = await _userRepository.Get(_currentUser.UserId),
+                    Sender = sender,
                     Receiver = receiver,
-                    Company = await _companyRepository.Get(_currentUser.CompanyId),
-                    Time = DateTime.Now,
+                    Company = company,
+                    Time = DateTime.UtcNow,
                 };
-                if (receiver == null || receiver.CompanyId != _currentUser.CompanyId) throw new Exception("Receiver does not exist in the company");
+                
 
                await _messageRepository.Insert(message);                    
                return message.MessageId;

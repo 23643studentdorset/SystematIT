@@ -96,7 +96,7 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                //entity.Navigation(e => e.userId).AutoInclude();
+                entity.Navigation(e => e.User).AutoInclude();
             });
 
             modelBuilder.Entity<Store>(entity =>

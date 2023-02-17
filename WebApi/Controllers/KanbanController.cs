@@ -88,11 +88,11 @@ namespace WebApi.Controllers
 
         [HttpGet("UserId")]
         [ValidateModel]
-        public async Task<IActionResult> GetAllByUserId(int userId)
+        public async Task<IActionResult> GetAllByUserId(int userId, string status)
         {
             try
             {
-                var result = await _kanbanService.GetAllByUserId(userId);
+                var result = await _kanbanService.GetAllByUserId(userId, status);
                 return Ok(result);
             }
             catch (Exception exception)

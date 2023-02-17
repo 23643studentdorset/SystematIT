@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastucture.Identity.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace KanbanModule.DTOs
         public int userId { get; set; }
 
         public string Description { get; set; }
+
+        public UserDto? user { get; set; }
     }
 }

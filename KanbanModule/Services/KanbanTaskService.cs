@@ -109,7 +109,7 @@ namespace KanbanModule.Services
             }
         }
 
-        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId)
+        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId, string status)
         {
             try
             {
@@ -119,7 +119,9 @@ namespace KanbanModule.Services
 
                 var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CompanyId == _currentUser.CompanyId
                     && x.KanbanTask.CurrentVersionId == x.VersionId 
-                    && (x.KanbanTask.ReporterUserId == userId || x.AssigneeUserId == userId));
+                    && (x.KanbanTask.ReporterUserId == userId || x.AssigneeUserId == userId) && x.TaskStatus.Name == status);
+
+                
 
                 var taskMapper = _mapper.Map<IEnumerable<KanbanTaskDetailsDto>>(result);
                 return taskMapper;
