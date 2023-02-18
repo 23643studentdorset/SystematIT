@@ -18,7 +18,7 @@ namespace KanbanModule.Interfaces
 
         Task<IEnumerable<KanbanTaskDetailsDto>> GetAllTasks();
 
-        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId);
+        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId, string status);
 
         Task<int> AddKanbanTask(AddKanbanTaskRequest request);
 

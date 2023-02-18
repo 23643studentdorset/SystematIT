@@ -93,11 +93,14 @@ namespace KanbanModule.Services
 
         }
 
-        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId)
+        public async Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId, string status)
         {
             try
             {
-                var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CurrentVersionId == x.VersionId && x.KanbanTask.CompanyId == _currentUser.CompanyId);
+                var result = await _kanbanTaskHistoryRepository.FindListByCondition(x => x.KanbanTask.CurrentVersionId == x.VersionId 
+                && x.KanbanTask.CompanyId == _currentUser.CompanyId
+                && x.Department.DepartmentId == departmentId
+                && x.TaskStatus.Name == status);
 
                 var taskMapper = _mapper.Map<IEnumerable<KanbanTaskDetailsDto>>(result);
 
