@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230214100532_initial")]
+    [Migration("20230221111807_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -98,7 +98,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -150,7 +150,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -159,7 +159,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
                         });
@@ -266,10 +266,10 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReceiverUserId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SenderUserId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Time")
@@ -279,9 +279,9 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("ReceiverUserId");
+                    b.HasIndex("ReceiverId");
 
-                    b.HasIndex("SenderUserId");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -424,7 +424,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -492,8 +492,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "R1TQojs4elWKwW2Yz+A/Tq4Be3ediMnvbzv0AWAbFdE=",
-                            Salt = "KaGRd9q5NOse3RYYDQ9B9Q=="
+                            Password = "9Y0lMkL/vVg6MfillNNBmeCMRnLdnLRBwPAHy3aFehA=",
+                            Salt = "8ra1c6vpeVJwf/OC7WbAPw=="
                         },
                         new
                         {
@@ -505,8 +505,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "John",
                             LastName = "Doe",
                             Mobile = "0878352233",
-                            Password = "6wt69Q4jTLmLtBwFh2daFmfKJWSMSsZvpl60f7IqRvs=",
-                            Salt = "VidVen9diodCZTvtv3J4oA=="
+                            Password = "64qPYH7Rrew0uRpCCrrY4Vd72o9O5dSZRuCdo5atJlM=",
+                            Salt = "W8PohmTcey3GxSAHQnchFg=="
                         });
                 });
 
@@ -664,14 +664,14 @@ namespace Infrastucture.DataAccess.Migrations
 
                     b.HasOne("DataModel.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverUserId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Message_Receiver_UserId");
 
                     b.HasOne("DataModel.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderUserId")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Message_Sender_UserId");

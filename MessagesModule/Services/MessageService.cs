@@ -27,7 +27,8 @@ namespace MessagesModule.Services
             try
             {
                 var sender = await _userRepository.Get(_currentUser.UserId);
-                var messages = await _messageRepository.FindListByCondition(x => x.Receiver.UserId == id && x.Sender.UserId == sender.UserId);                                   
+                var messages = await _messageRepository.FindListByCondition(x => x.Receiver.UserId == id && x.Sender.UserId == sender.UserId 
+                || x.ReceiverId == _currentUser.UserId && x.SenderId == id);                                   
                 
                 return messages;
             }
@@ -36,41 +37,26 @@ namespace MessagesModule.Services
                 throw;
             }
         }
-        /*
-        public async Task<IEnumerable<Message>> GetBySenderId(int id)
-        {
-            try
-            {
-                var result = await _messageRepository.FindListByCondition(x => x.Sender.UserId == id);
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        */
+     
         public async Task<int> SendMessage(SendMessageRequest request)
         {
             try
             {
                 var receiver = await _userRepository.Get(request.ReceiverId);
-                var sender = await _userRepository.Get(_currentUser.UserId);
-                var company = await _companyRepository.Get(_currentUser.CompanyId);
-
+   
                 if (receiver == null || receiver.CompanyId != _currentUser.CompanyId) 
                     throw new Exception("Receiver does not exist in the company");
-                if (sender == null) 
-                    throw new Exception("sender not found");
-                if (company == null) 
-                    throw new Exception("company not found");
+
+                if (_currentUser.UserId == receiver.UserId)
+                    throw new Exception("You can not send an automessage");
+
 
                 var message = new Message()
                 {
                     Content = request.Content,
-                    Sender = sender,
-                    Receiver = receiver,
-                    Company = company,
+                    SenderId = _currentUser.UserId,
+                    ReceiverId = request.ReceiverId,
+                    CompanyId = _currentUser.CompanyId,
                     Time = DateTime.UtcNow,
                 };
                 

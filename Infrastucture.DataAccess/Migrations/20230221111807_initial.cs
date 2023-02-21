@@ -148,8 +148,8 @@ namespace Infrastucture.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    SenderUserId = table.Column<int>(type: "int", nullable: false),
-                    ReceiverUserId = table.Column<int>(type: "int", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -163,13 +163,13 @@ namespace Infrastucture.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Message_Receiver_UserId",
-                        column: x => x.ReceiverUserId,
+                        column: x => x.ReceiverId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Message_Sender_UserId",
-                        column: x => x.SenderUserId,
+                        column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
@@ -324,8 +324,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -353,26 +353,26 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "R1TQojs4elWKwW2Yz+A/Tq4Be3ediMnvbzv0AWAbFdE=", "KaGRd9q5NOse3RYYDQ9B9Q==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "9Y0lMkL/vVg6MfillNNBmeCMRnLdnLRBwPAHy3aFehA=", "8ra1c6vpeVJwf/OC7WbAPw==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "6wt69Q4jTLmLtBwFh2daFmfKJWSMSsZvpl60f7IqRvs=", "VidVen9diodCZTvtv3J4oA==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "64qPYH7Rrew0uRpCCrrY4Vd72o9O5dSZRuCdo5atJlM=", "W8PohmTcey3GxSAHQnchFg==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -451,14 +451,14 @@ namespace Infrastucture.DataAccess.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ReceiverUserId",
+                name: "IX_Messages_ReceiverId",
                 table: "Messages",
-                column: "ReceiverUserId");
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_SenderUserId",
+                name: "IX_Messages_SenderId",
                 table: "Messages",
-                column: "SenderUserId");
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stores_CompanyId",
