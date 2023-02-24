@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Infrastucture.DataAccess.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IDisposable, IGenericRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _entities;
@@ -58,6 +58,16 @@ namespace Infrastucture.DataAccess.Repositories
                 throw new ArgumentNullException("entity");
             _entities.Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            _context.Dispose();
         }
     }
 }
