@@ -54,6 +54,24 @@ namespace WebApi.Controllers
                 return BadRequest(exception.Message);
             }
         }
+        [HttpGet("Detailed/id")]
+        [ValidateModel]
+        [Authorize]
+        public async Task<IActionResult> GetDetailsById(int id)
+        {
+            try
+            {
+                var result = await _userService.GetDetailsById(id);
+                if (result == null)
+                    return StatusCode(StatusCodes.Status204NoContent, $"No user found with id: {id}");
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Unexpected exception on Get user by id ", exception);
+                return BadRequest(exception.Message);
+            }
+        }
 
         [HttpGet("email")]
         [ValidateModel]
@@ -116,6 +134,24 @@ namespace WebApi.Controllers
             try
             {
                 var result = await _userService.UpdateUserRequest(request);
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Unexpected exception on Update user ", exception);
+                return BadRequest(exception.Message);
+
+            }
+        }
+
+        [HttpPut("RoleId")]
+        [ValidateModel]
+        [Authorize]
+        public async Task<IActionResult> PutUpdateUserRoles(UpdateUserRoleRequest request)
+        {
+            try
+            {
+                var result = await _userService.UpdateUserRoleRequest(request);
                 return Ok(result);
             }
             catch (Exception exception)

@@ -35,7 +35,7 @@ namespace Infrastucture.DataAccess.Repositories
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
-      
+
         public virtual async Task Insert(T entity)
         {
             if (entity == null)
@@ -62,12 +62,8 @@ namespace Infrastucture.DataAccess.Repositories
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        protected virtual void Dispose(bool disposing)
-        {
             _context.Dispose();
         }
+
     }
 }

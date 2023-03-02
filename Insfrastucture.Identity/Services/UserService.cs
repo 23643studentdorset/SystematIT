@@ -142,7 +142,7 @@ namespace Infrastucture.Identity.Services
         {
             try
             {
-                var result = await _userRepository.Get(id);
+                var result = await _userRepository.GetUserByIdWithRoles(id);
 
                 if (result == null || result.CompanyId != _currentUser.CompanyId)
                     throw new Exception("User does not exists in the system.");
@@ -176,6 +176,49 @@ namespace Infrastucture.Identity.Services
             {
                 throw;
             }
+        }
+
+        public async Task<bool> UpdateUserRoleRequest(UpdateUserRoleRequest request)
+        {
+            try
+            {
+                var userToUpdate = await _userRepository.Get(request.UserId);
+                if (userToUpdate == null || userToUpdate.CompanyId != _currentUser.CompanyId)
+                    throw new Exception("User does not exists in the system.");
+
+                var roleAdmin = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleAdmin);
+                var roleManager = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleManager);
+                //var roleRegular = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleRegular);
+                           
+                switch (request.RoleId)
+                {
+                    case 1:
+                        userToUpdate.UserRoles = new List<UserRole>() {
+                            new UserRole() { Role = roleAdmin, User = userToUpdate } };
+
+                        break;
+                    case 2:
+
+                        userToUpdate.UserRoles = new List<UserRole>() {
+                            new UserRole() { Role = roleManager, User = userToUpdate } };                                               
+                        break;
+                    default:
+                        throw new Exception("this is not a valid Role");
+                        break;
+
+                }
+               
+
+                await _userRepository.Update(userToUpdate);
+                
+                
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
         }
     }
 }

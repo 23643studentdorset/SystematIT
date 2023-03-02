@@ -13,5 +13,7 @@ namespace Infrastucture.Identity
         public static readonly string ClaimCompanyId = "CompanyId";
 
         public static readonly string RoleRegular = "Regular";
+        public static readonly string RoleManager = "Manager";
+        public static readonly string RoleAdmin = "Admin";
     }
 }

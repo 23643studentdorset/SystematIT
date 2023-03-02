@@ -112,7 +112,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("id")]
         [Authorize(Roles = "Manager")]
         [ValidateModel]
         public async Task<IActionResult> DeleteStore(int id)

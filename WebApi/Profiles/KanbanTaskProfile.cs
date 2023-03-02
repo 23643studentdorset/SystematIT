@@ -22,7 +22,19 @@ namespace WebApi.Profiles
                 .ForMember(dest => dest.LastModifiedBy, opt => opt.MapFrom(src => src.LastModifiedBy))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.KanbanTask.Comments));
 
+            CreateMap<KanbanTaskHistory, KanbanTaskHistoryFilteredDto>()
+                .ForMember(dest => dest.AssigneeUserFirstName, opt => opt.MapFrom(src => src.Assignee.FirstName))
+                .ForMember(dest => dest.AssigneeUserLastName, opt => opt.MapFrom(src => src.Assignee.LastName))
+                .ForMember(dest => dest.ReporterUserFirstName, opt => opt.MapFrom(src => src.KanbanTask.Reporter.FirstName))
+                .ForMember(dest => dest.ReporterUserLastName, opt => opt.MapFrom(src => src.KanbanTask.Reporter.LastName))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.KanbanTask.CreatedOn))
+                ;
+
             CreateMap<KanbanTask, KanbanTaskDto>();
+
+            CreateMap<KanbanTask, KanbanTaskFilteredDto>()
+                .ForMember(dest => dest.ReporterUserFirstName, opt => opt.MapFrom(src => src.Reporter.FirstName))
+                .ForMember(dest => dest.ReporterUserLastName, opt => opt.MapFrom(src => src.Reporter.LastName));
         }
     }
 }

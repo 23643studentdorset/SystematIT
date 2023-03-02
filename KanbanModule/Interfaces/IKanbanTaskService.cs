@@ -1,24 +1,18 @@
-﻿using DataModel;
-using KanbanModule.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KanbanModule.DTOs;
 
 namespace KanbanModule.Interfaces
 {
     public interface IKanbanTaskService
     {
-        Task<KanbanTaskDto>GetById(int taskId);
+        Task<KanbanTaskDto> GetById(int taskId);
 
         Task<KanbanTaskDetailsDto> GetTaskDetailsById(int taskId);
 
-        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByUserId(int userId, string status);
+        Task<IEnumerable<KanbanTaskHistoryFilteredDto>> GetAllByUserId(int userId, string status);
 
         Task<IEnumerable<KanbanTaskDetailsDto>> GetAllTasks();
 
-        Task<IEnumerable<KanbanTaskDetailsDto>> GetAllByDepartmentId(int departmentId, string status);
+        Task<IEnumerable<KanbanTaskHistoryFilteredDto>> GetAllByDepartmentId(int departmentId, string status);
 
         Task<int> AddKanbanTask(AddKanbanTaskRequest request);
 

@@ -1,6 +1,7 @@
 ﻿using DataModel;
 using Infrastucture.DataAccess.Interfaces;
 using Infrastucture.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Infrastucture.DataAccess.Repositories
@@ -12,10 +13,22 @@ namespace Infrastucture.DataAccess.Repositories
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private IMemoryCache _cache;
+        private readonly DbSet<User> _entities;
 
         public UserRepository(ApplicationDbContext context, IMemoryCache cache) : base(context)
         {
             _cache = cache;
+            _entities = context.Set<User>();
+        }
+
+        public async Task<User> FindUserAuthenticationByEmail(string email)
+        {
+            return await _entities.Include(x => x.UserRoles).FirstOrDefaultAsync(x => x.Email == email);
+        }
+
+        public async Task<User> GetUserByIdWithRoles(int id)
+        {
+            return await _entities.Include(x => x.UserRoles).FirstOrDefaultAsync(x => x.UserId == id);
         }
 
         public override async Task<User> Get(int id)
@@ -39,6 +52,8 @@ namespace Infrastucture.DataAccess.Repositories
 
         public override async Task Update(User user)
         {
+            _cache.Remove(GetCacheKey(user.UserId));
+            
             await base.Update(user);
 
             SetUserCache(user);

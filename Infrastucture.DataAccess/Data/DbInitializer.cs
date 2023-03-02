@@ -44,10 +44,6 @@ namespace Infrastucture.DataAccess.Data
             {
                 entity.Navigation(e => e.Reporter).AutoInclude();
 
-                entity.Navigation(e => e.Histories).AutoInclude();
-
-                entity.Navigation(e => e.Comments).AutoInclude();
-
                 entity.HasOne(e => e.Reporter)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict)
@@ -144,8 +140,6 @@ namespace Infrastucture.DataAccess.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Navigation(e => e.UserRoles).AutoInclude();
-
                 entity.HasOne(e => e.Company)
                    .WithMany()
                    .OnDelete(DeleteBehavior.Restrict)

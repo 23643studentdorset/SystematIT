@@ -11,8 +11,8 @@ namespace DataModel
         public int TaskHistoryId { get; set; }
 
         public int KanbanTaskId { get; set; }
-        
-        public KanbanTask KanbanTask { get; set; }  
+
+        public KanbanTask KanbanTask { get; set; }
 
         public int VersionId { get; set; }
 
@@ -20,9 +20,15 @@ namespace DataModel
 
         public string Description { get; set; }
 
+        public int TaskStatusStatusId { get; set; }
+
         public Status TaskStatus { get; set; }
 
+        public int DepartmentId { get; set; }
+
         public Department Department { get; set; }
+
+        public int? StoreId { get; set; }
 
         public Store? Store { get; set; }
 

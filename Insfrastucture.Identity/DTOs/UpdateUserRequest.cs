@@ -9,9 +9,9 @@ namespace Infrastucture.Identity.DTOs
 {
     public class UpdateUserRequest
     {
+        [Required]
         public int UserId { get; set; } 
 
-        [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
 

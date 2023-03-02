@@ -26,8 +26,8 @@ namespace Infrastucture.Identity.Services
         {           
             try
             {
-                
-                var user = await _userRepository.FindByCondition(x => x.Email == request.Email);
+
+                var user = await _userRepository.FindUserAuthenticationByEmail(request.Email);
 
                 if (user != null && PasswordEncryption.IsValidPassword(request.Password, user.Password, user.Salt))
                 { 
