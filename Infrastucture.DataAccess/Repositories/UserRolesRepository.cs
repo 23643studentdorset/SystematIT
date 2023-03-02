@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Infrastucture.DataAccess.Repositories
 {
-    public class UserRoleRepository : GenericRepository<UserRole>, IUserRoleRepository
+    public class UserRolesRepository : GenericRepository<UserRole>, IUserRolesRepository
     {
-        public UserRoleRepository(ApplicationDbContext context) : base(context)
+        public UserRolesRepository(ApplicationDbContext context) : base(context)
         {
         }
     }

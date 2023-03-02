@@ -24,8 +24,6 @@ namespace Infrastucture.Identity.Interfaces
 
         Task<bool> UpdateUserRequest(UpdateUserRequest user);
 
-        Task<bool> UpdateUserRoleRequest(UpdateUserRoleRequest user);
-
         Task<bool> DeleteUser(int id);
     }
 }

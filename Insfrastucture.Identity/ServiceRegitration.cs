@@ -14,6 +14,7 @@ namespace Infrastucture.Identity
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
+            services.AddScoped<IUserRolesService, UserRolesService>();
         }
     }
 }

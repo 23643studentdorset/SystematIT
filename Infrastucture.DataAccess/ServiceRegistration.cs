@@ -22,6 +22,7 @@ namespace Infrastucture.DataAccess
             services.AddScoped<IStatusRepository, StatusRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IUserRolesRepository, UserRolesRepository>();
         }
     }
 }

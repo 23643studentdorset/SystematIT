@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastucture.DataAccess.Interfaces
 {
-    public interface IUserRoleRepository : IGenericRepository<UserRole>
+    public interface IUserRolesRepository : IGenericRepository<UserRole>
     {
     }
 }

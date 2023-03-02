@@ -14,14 +14,16 @@ namespace Infrastucture.Identity.Services
         private readonly IMapper _mapper;
         private readonly ICompanyRepository _companyRepository;
         private readonly IRoleRepository _roleRepository;
+        //private readonly IUserRoleRepository _userRoleRepository;
 
-        public UserService(IUserRepository userRepository, ICurrentUser currentUser, ICompanyRepository companyRepository, IMapper mapper, IRoleRepository userRoleRepository)
+        public UserService(IUserRepository userRepository, ICurrentUser currentUser, ICompanyRepository companyRepository, IMapper mapper, IRoleRepository roleRepository, IUserRolesRepository userRoleRepository)
         { 
             _userRepository = userRepository;
             _companyRepository = companyRepository;
             _currentUser = currentUser;
             _mapper = mapper;
-            _roleRepository = userRoleRepository;
+            _roleRepository = roleRepository;
+            //_userRoleRepository = userRoleRepository;
         }
 
         public async Task<int> AddUserRequest(AddUserRequest request)
@@ -178,47 +180,6 @@ namespace Infrastucture.Identity.Services
             }
         }
 
-        public async Task<bool> UpdateUserRoleRequest(UpdateUserRoleRequest request)
-        {
-            try
-            {
-                var userToUpdate = await _userRepository.Get(request.UserId);
-                if (userToUpdate == null || userToUpdate.CompanyId != _currentUser.CompanyId)
-                    throw new Exception("User does not exists in the system.");
-
-                var roleAdmin = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleAdmin);
-                var roleManager = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleManager);
-                //var roleRegular = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleRegular);
-                           
-                switch (request.RoleId)
-                {
-                    case 1:
-                        userToUpdate.UserRoles = new List<UserRole>() {
-                            new UserRole() { Role = roleAdmin, User = userToUpdate } };
-
-                        break;
-                    case 2:
-
-                        userToUpdate.UserRoles = new List<UserRole>() {
-                            new UserRole() { Role = roleManager, User = userToUpdate } };                                               
-                        break;
-                    default:
-                        throw new Exception("this is not a valid Role");
-                        break;
-
-                }
-               
-
-                await _userRepository.Update(userToUpdate);
-                
-                
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return true;
-        }
+       
     }
 }

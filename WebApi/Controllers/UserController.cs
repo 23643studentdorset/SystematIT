@@ -144,24 +144,6 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPut("RoleId")]
-        [ValidateModel]
-        [Authorize]
-        public async Task<IActionResult> PutUpdateUserRoles(UpdateUserRoleRequest request)
-        {
-            try
-            {
-                var result = await _userService.UpdateUserRoleRequest(request);
-                return Ok(result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Unexpected exception on Update user ", exception);
-                return BadRequest(exception.Message);
-
-            }
-        }
-
         [HttpDelete("{id}")]
         [ValidateModel]
         [Authorize]
