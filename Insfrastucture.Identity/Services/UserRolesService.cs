@@ -16,16 +16,13 @@ namespace Infrastucture.Identity.Services
         private readonly IUserRolesRepository _userRoleRepository;
         private readonly ICurrentUser _currentUser;
         private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
-        private readonly IMapper _mapper;
-
-        public UserRolesService(IUserRolesRepository userRolesRepository, ICurrentUser currentUser, IUserRepository userRepository, IRoleRepository roleRepository, IMapper mapper)
+       
+        public UserRolesService(IUserRolesRepository userRolesRepository, ICurrentUser currentUser, IUserRepository userRepository)
         {
             _userRoleRepository = userRolesRepository;
             _currentUser = currentUser;
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
-            _mapper = mapper;
+         
         }
 
         public async Task<bool> AddUserRoleRequest(UpdateUserRoleRequest request)
@@ -36,53 +33,21 @@ namespace Infrastucture.Identity.Services
                 if (userToUpdate == null || userToUpdate.CompanyId != _currentUser.CompanyId)
                     throw new Exception("User does not exists in the system.");
 
-                var roleAdmin = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleAdmin);
-                var roleManager = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleManager);
-                var roleRegular = await _roleRepository.FindByCondition(x => x.Name == IdentitySettings.RoleRegular);               
-
-                switch (request.RoleId)
-                {
-                    case 1:
-                        if (userToUpdate.UserRoles.FirstOrDefault(roles => roles.Role.Name == IdentitySettings.RoleAdmin) == null)
-                        {
-                            await _userRoleRepository.Insert(
-                        new UserRole
-                        {
-                            UserId = userToUpdate.UserId,
-                            RoleId = roleAdmin.RoleId
-                        });
-                        }
-                        else throw new Exception("The user already has Admin Role");                           
-                        break;
-                    case 2:
-                        if (userToUpdate.UserRoles.FirstOrDefault(roles => roles.Role.Name == IdentitySettings.RoleManager) == null)
-                        {
-                            await _userRoleRepository.Insert(
-                          new UserRole
-                          {
-                              UserId = userToUpdate.UserId,
-                              RoleId = roleManager.RoleId
-                          });
-                        }
-                        else throw new Exception("The user already has Manager Role");
-                        break;
-                    case 3:
-                        if (userToUpdate.UserRoles.FirstOrDefault(roles => roles.Role.Name == IdentitySettings.RoleRegular) == null)
-                        {
-                            await _userRoleRepository.Insert(
-                           new UserRole
-                           {
-                               UserId = userToUpdate.UserId,
-                               RoleId = roleRegular.RoleId
-                           });
-                        }
-                        else throw new Exception("The user already has Regular Role");                       
-                        break;
-
-                    default:
-                        throw new Exception("this is not a valid Role");
-                        break;
-                }
+                var availableRoles = await _userRoleRepository.GetAll();
+                if (!availableRoles.Any(x => x.RoleId == request.RoleId))
+                    throw new Exception("Rol does not exists in the system");
+                
+                if (userToUpdate.UserRoles.Any(roles => roles.Role.RoleId == request.RoleId))
+                    throw new Exception("The user already has this Role");
+                   
+                await _userRoleRepository.Insert(
+                    new UserRole
+                    {
+                        UserId = userToUpdate.UserId,
+                        RoleId = request.RoleId
+                    });
+               
+   
                 return true;
             }
             catch (Exception)

@@ -324,8 +324,8 @@ namespace Infrastucture.DataAccess.Migrations
                 columns: new[] { "CompanyId", "Active", "CreatedOn", "DeletedOn", "Description", "Name", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
-                    { 2, true, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
+                    { 1, true, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), null, "Chocolates Company", "Butlers", "+353864069750" },
+                    { 2, true, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), null, "IT Company", "SystematIT", "+353833057491" }
                 });
 
             migrationBuilder.InsertData(
@@ -353,26 +353,29 @@ namespace Infrastucture.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "9Y0lMkL/vVg6MfillNNBmeCMRnLdnLRBwPAHy3aFehA=", "8ra1c6vpeVJwf/OC7WbAPw==" });
+                values: new object[] { 1, "35 Test Adress", 2, new DateTime(1989, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "lucianoGimenez@gmail.com", "Luciano", "Gimenez", "0838352063", "z9a3a7Av4hAHvA+AcueIGy0oN7lNWS3JO2NHxiDmsds=", "55uV301XFCTQZzFjXUobPA==" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Address", "CompanyId", "DOB", "DeletedOn", "Email", "FirstName", "LastName", "Mobile", "Password", "Salt" },
-                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "64qPYH7Rrew0uRpCCrrY4Vd72o9O5dSZRuCdo5atJlM=", "W8PohmTcey3GxSAHQnchFg==" });
+                values: new object[] { 2, "28 Test Adress", 1, new DateTime(1988, 5, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "JohnDoe@buttlers.com", "John", "Doe", "0878352233", "WS2B47wDDKn5jSMRITWXbsjkt0k6i0a36sBu2uscmWc=", "4CB7spMNnd0u2irWcWTnMQ==" });
 
             migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "DepartmentId", "Active", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
-                    { 2, true, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" }
+                    { 1, true, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Human Resources", null, null, "HR" },
+                    { 2, true, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Finance", null, null, "Finance" },
+                    { 3, true, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Marketing", null, null, "Marketing" },
+                    { 4, true, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Sales", null, null, "Sales" },
+                    { 5, true, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Research and development", null, null, "Research and development" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Stores",
                 columns: new[] { "StoreId", "Active", "CompanyId", "CreatedByUserId", "CreatedOn", "Description", "ModifiedByUserId", "ModifiedOn", "Name" },
-                values: new object[] { 1, true, 1, 1, new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
+                values: new object[] { 1, true, 1, 1, new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local), "Cafe", null, null, "Ballsbridge" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -380,7 +383,9 @@ namespace Infrastucture.DataAccess.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
+                    { 1, 2 },
                     { 2, 1 },
+                    { 2, 2 },
                     { 3, 1 },
                     { 3, 2 }
                 });

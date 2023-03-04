@@ -1,19 +1,18 @@
 ﻿using DataModel;
 using Infrastucture.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Infrastucture.DataAccess.Data
 {
     public class DbInitializer
     {
         protected readonly ModelBuilder modelBuilder;
-        
 
-        public DbInitializer(ModelBuilder modelBuilder) 
+
+        public DbInitializer(ModelBuilder modelBuilder)
         {
             this.modelBuilder = modelBuilder;
-            
+
         }
 
         public void EntityDefinition()
@@ -103,7 +102,7 @@ namespace Infrastucture.DataAccess.Data
 
                 entity.Navigation(e => e.CreatedBy).AutoInclude();
 
-                entity.Navigation(e => e.ModifiedBy).AutoInclude();                 
+                entity.Navigation(e => e.ModifiedBy).AutoInclude();
 
                 entity.HasQueryFilter(p => p.Active);
 
@@ -146,7 +145,8 @@ namespace Infrastucture.DataAccess.Data
                    .HasConstraintName("FK_User_Company_CompanyId");
             });
 
-            modelBuilder.Entity<UserRole>(entity => {
+            modelBuilder.Entity<UserRole>(entity =>
+            {
                 entity.HasKey(e => new { e.RoleId, e.UserId });
                 entity.Navigation(e => e.Role).AutoInclude();
             });
@@ -158,7 +158,7 @@ namespace Infrastucture.DataAccess.Data
         }
 
         public void Seed()
-        {                     
+        {
 
             var companies = new List<Company>()
             {
@@ -166,7 +166,7 @@ namespace Infrastucture.DataAccess.Data
                 new Company { CompanyId = 2, Active = true, Description = "IT Company", CreatedOn = DateTime.Today, Name = "SystematIT", PhoneNumber = "+353833057491" }
             };
 
-            var roles = new List<Role>() 
+            var roles = new List<Role>()
             {
                 new Role() { RoleId = 1, Name="Admin", Description = "Admin user access" },
                 new Role() { RoleId = 2, Name="Manager", Description = "Manager access" },
@@ -176,7 +176,7 @@ namespace Infrastucture.DataAccess.Data
             var passwordHashedUser1 = PasswordEncryption.SaltAndHashPassword(DataAccessSettings.SecretUserAdminPassword);
             var passwordHashedUser2 = PasswordEncryption.SaltAndHashPassword(DataAccessSettings.SecretUserTestPassword);
 
-            var firstUser = new User 
+            var firstUser = new User
             {
                 UserId = 1,
                 FirstName = "Luciano",
@@ -222,6 +222,16 @@ namespace Infrastucture.DataAccess.Data
                     RoleId = roles[2].RoleId
                 },
                 new UserRole
+                {
+                    UserId = secondUser.UserId,
+                    RoleId = roles[0].RoleId
+                },
+                 new UserRole
+                {
+                    UserId = secondUser.UserId,
+                    RoleId = roles[1].RoleId
+                },
+                  new UserRole
                 {
                     UserId = secondUser.UserId,
                     RoleId = roles[2].RoleId
@@ -279,7 +289,34 @@ namespace Infrastucture.DataAccess.Data
                     Active = true,
                     CreatedByUserId = firstUser.UserId,
                     CreatedOn = DateTime.Today
+                },
+                new
+                {
+                    DepartmentId = 3,
+                    Name = "Marketing",
+                    Description = "Marketing",
+                    Active = true,
+                    CreatedByUserId = firstUser.UserId,
+                    CreatedOn = DateTime.Today
+                },
+                new
+                {
+                    DepartmentId = 4,
+                    Name = "Sales",
+                    Description = "Sales",
+                    Active = true,
+                    CreatedByUserId = firstUser.UserId,
+                    CreatedOn = DateTime.Today
+                }, new
+                {
+                    DepartmentId = 5,
+                    Name = "Research and development",
+                    Description = "Research and development",
+                    Active = true,
+                    CreatedByUserId = firstUser.UserId,
+                    CreatedOn = DateTime.Today
                 });
+
 
             modelBuilder.Entity<UserRole>()
                 .HasData(userRoles);

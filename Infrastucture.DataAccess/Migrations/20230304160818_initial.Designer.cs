@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230221111807_initial")]
+    [Migration("20230304160818_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 1,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Chocolates Company",
                             Name = "Butlers",
                             PhoneNumber = "+353864069750"
@@ -98,7 +98,7 @@ namespace Infrastucture.DataAccess.Migrations
                         {
                             CompanyId = 2,
                             Active = true,
-                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "IT Company",
                             Name = "SystematIT",
                             PhoneNumber = "+353833057491"
@@ -150,7 +150,7 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 1,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Human Resources",
                             Name = "HR"
                         },
@@ -159,9 +159,36 @@ namespace Infrastucture.DataAccess.Migrations
                             DepartmentId = 2,
                             Active = true,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Finance",
                             Name = "Finance"
+                        },
+                        new
+                        {
+                            DepartmentId = 3,
+                            Active = true,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Marketing",
+                            Name = "Marketing"
+                        },
+                        new
+                        {
+                            DepartmentId = 4,
+                            Active = true,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Sales",
+                            Name = "Sales"
+                        },
+                        new
+                        {
+                            DepartmentId = 5,
+                            Active = true,
+                            CreatedByUserId = 1,
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
+                            Description = "Research and development",
+                            Name = "Research and development"
                         });
                 });
 
@@ -424,7 +451,7 @@ namespace Infrastucture.DataAccess.Migrations
                             Active = true,
                             CompanyId = 1,
                             CreatedByUserId = 1,
-                            CreatedOn = new DateTime(2023, 2, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedOn = new DateTime(2023, 3, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "Cafe",
                             Name = "Ballsbridge"
                         });
@@ -492,8 +519,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "Luciano",
                             LastName = "Gimenez",
                             Mobile = "0838352063",
-                            Password = "9Y0lMkL/vVg6MfillNNBmeCMRnLdnLRBwPAHy3aFehA=",
-                            Salt = "8ra1c6vpeVJwf/OC7WbAPw=="
+                            Password = "z9a3a7Av4hAHvA+AcueIGy0oN7lNWS3JO2NHxiDmsds=",
+                            Salt = "55uV301XFCTQZzFjXUobPA=="
                         },
                         new
                         {
@@ -505,8 +532,8 @@ namespace Infrastucture.DataAccess.Migrations
                             FirstName = "John",
                             LastName = "Doe",
                             Mobile = "0878352233",
-                            Password = "64qPYH7Rrew0uRpCCrrY4Vd72o9O5dSZRuCdo5atJlM=",
-                            Salt = "W8PohmTcey3GxSAHQnchFg=="
+                            Password = "WS2B47wDDKn5jSMRITWXbsjkt0k6i0a36sBu2uscmWc=",
+                            Salt = "4CB7spMNnd0u2irWcWTnMQ=="
                         });
                 });
 
@@ -542,6 +569,16 @@ namespace Infrastucture.DataAccess.Migrations
                         },
                         new
                         {
+                            RoleId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
                             RoleId = 3,
                             UserId = 2
                         });
@@ -556,7 +593,7 @@ namespace Infrastucture.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("DataModel.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -754,8 +791,6 @@ namespace Infrastucture.DataAccess.Migrations
 
             modelBuilder.Entity("DataModel.User", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
