@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{7FF569A1-CC2F-4C53-B80C-57B87B59D7D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{7FF569A1-CC2F-4C53-B80C-57B87B59D7D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{0D6A0EF3-EF80-424B-AFFE-B09AB12D3A81}"
 EndProject
@@ -13,15 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{CDE00463
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastucture", "Infrastucture", "{0E43566B-8A83-4700-8C4C-9391D405F44D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbanModule", "KanbanModule\KanbanModule.csproj", "{4D02CFE8-2D82-47C1-AB1F-DDFEDD1EB9BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbanModule", "KanbanModule\KanbanModule.csproj", "{4D02CFE8-2D82-47C1-AB1F-DDFEDD1EB9BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagesModule", "MessagesModule\MessagesModule.csproj", "{7770C700-D064-4B1F-A199-8A10C12F5A75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagesModule", "MessagesModule\MessagesModule.csproj", "{7770C700-D064-4B1F-A199-8A10C12F5A75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarModule", "CalendarModule\CalendarModule.csproj", "{62DC8508-34CA-49E4-A18C-E3249A97E569}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture.DataAccess", "Infrastucture.DataAccess\Infrastucture.DataAccess.csproj", "{127A5E74-01AE-48A2-8417-9EA6A5314428}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastucture.DataAccess", "Infrastucture.DataAccess\Infrastucture.DataAccess.csproj", "{127A5E74-01AE-48A2-8417-9EA6A5314428}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "DataModel\DataModel.csproj", "{80704BFA-795A-41AB-939C-9FCAEC704BFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModel", "DataModel\DataModel.csproj", "{80704BFA-795A-41AB-939C-9FCAEC704BFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture.Identity", "Insfrastucture.Identity\Infrastucture.Identity.csproj", "{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture.Helpers", "Infrastucture.Helpers\Infrastucture.Helpers.csproj", "{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +43,6 @@ Global
 		{7770C700-D064-4B1F-A199-8A10C12F5A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7770C700-D064-4B1F-A199-8A10C12F5A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7770C700-D064-4B1F-A199-8A10C12F5A75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62DC8508-34CA-49E4-A18C-E3249A97E569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62DC8508-34CA-49E4-A18C-E3249A97E569}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62DC8508-34CA-49E4-A18C-E3249A97E569}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62DC8508-34CA-49E4-A18C-E3249A97E569}.Release|Any CPU.Build.0 = Release|Any CPU
 		{127A5E74-01AE-48A2-8417-9EA6A5314428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{127A5E74-01AE-48A2-8417-9EA6A5314428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{127A5E74-01AE-48A2-8417-9EA6A5314428}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +51,14 @@ Global
 		{80704BFA-795A-41AB-939C-9FCAEC704BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80704BFA-795A-41AB-939C-9FCAEC704BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80704BFA-795A-41AB-939C-9FCAEC704BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,9 +67,10 @@ Global
 		{7FF569A1-CC2F-4C53-B80C-57B87B59D7D6} = {0D6A0EF3-EF80-424B-AFFE-B09AB12D3A81}
 		{4D02CFE8-2D82-47C1-AB1F-DDFEDD1EB9BA} = {88D4FE8F-9B30-45B9-AE49-4A5E79D62B20}
 		{7770C700-D064-4B1F-A199-8A10C12F5A75} = {88D4FE8F-9B30-45B9-AE49-4A5E79D62B20}
-		{62DC8508-34CA-49E4-A18C-E3249A97E569} = {88D4FE8F-9B30-45B9-AE49-4A5E79D62B20}
 		{127A5E74-01AE-48A2-8417-9EA6A5314428} = {0E43566B-8A83-4700-8C4C-9391D405F44D}
 		{80704BFA-795A-41AB-939C-9FCAEC704BFE} = {CDE00463-2DD4-41A1-A566-FDC351682D4C}
+		{E879A90E-0AA0-4A79-84FE-23B2F2B4D51F} = {0E43566B-8A83-4700-8C4C-9391D405F44D}
+		{AFBF1647-D8F1-42E4-88F4-2C7E1FEFA9B3} = {0E43566B-8A83-4700-8C4C-9391D405F44D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5958A3DA-B01B-447E-AFF5-5B7EFC91E7C8}
